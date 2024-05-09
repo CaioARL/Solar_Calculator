@@ -24,7 +24,13 @@
     <string name="exit">Exit</string>
     <string name="settings">Settings</string>
     <string name="title_activity_panel">PanelActivity</string>
-    <string name="energy_info">Aqui você pode configurar o valor do preço do \'kilowatt-hora\'</string>
-    <string name="panel_info">Aqui você pode configurar a taxa da eficiência do painel solar</string>
+    <string name="energy_info">Aqui você pode configurar os valores relacionados a de geração energia</string>
+    <string name="panel_info">Aqui você pode configurar os valores relacionados ao painel solar</string>
     <string name="save">Save</string>
+    <string name="per_odo_de_tempo">Período de tempo para cálculo</string>
+    <string-array name="periodos">
+        <item>Diário</item>
+        <item>Semanal</item>
+        <item>Mensal</item>
+    </string-array>
 </resources>

@@ -11,40 +11,65 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="15dp"
         android:text="@string/energy_info"
+        android:textAlignment="center"
         android:textSize="35sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/per_odo_de_tempo"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerPeriodos"
+        app:layout_constraintStart_toStartOf="@+id/spinnerPeriodos" />
+
+    <Spinner
+        android:id="@+id/spinnerPeriodos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="630dp"
+        android:minHeight="48dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editPreco"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="197dp"
+        android:layout_marginBottom="196dp"
         android:hint="@string/_0_50"
         android:inputType="number|numberDecimal"
         android:textColorHint="#78909C"
         android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
     <Button
         android:id="@+id/btnSaveEnergy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="250dp"
+        android:layout_marginBottom="27dp"
         android:text="@string/save"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="20sp"
         android:textStyle="bold"
         app:icon="@android:drawable/ic_menu_save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/btnBack"
+        app:layout_constraintStart_toStartOf="@+id/btnBack" />
 
     <Button
         android:id="@+id/btnBack"
@@ -59,7 +84,6 @@
         app:icon="@android:drawable/ic_menu_revert"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.500"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
