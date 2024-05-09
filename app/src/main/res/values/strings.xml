@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Solar Calculator</string>
+    <string name="search">Search</string>
+    <string name="enter_address">Enter address</string>
+    <string name="solar_calculator">Solar Calculator</string>
+    <string name="textview">TextView</string>
+    <string name="back">Back</string>
+    <string name="calculate">Calculate</string>
+    <string name="complete_address">Complete Address</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="street_view">Street View</string>
+    <string name="total_energy">Total Energy</string>
+    <string name="new_address">New Address</string>
+    <string name="money_saved">Money Saved</string>
+    <string name="energy">ENERGY</string>
+    <string name="_0_2">20%</string>
+    <string name="configura_es">Configurações</string>
+    <string name="pre_o">Preço</string>
+    <string name="_0_50">R$0.50</string>
+    <string name="efici_ncia">Eficiência</string>
+    <string name="solar_panel">Solar Panel</string>
+    <string name="energy_2">Energy</string>
+    <string name="exit">Exit</string>
+    <string name="settings">Settings</string>
+    <string name="title_activity_panel">PanelActivity</string>
+    <string name="energy_info">Aqui você pode configurar o valor do preço do \'kilowatt-hora\'</string>
+    <string name="panel_info">Aqui você pode configurar a taxa da eficiência do painel solar</string>
+    <string name="save">Save</string>
+</resources>
