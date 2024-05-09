@@ -24,10 +24,14 @@
     <string name="exit">Exit</string>
     <string name="settings">Settings</string>
     <string name="title_activity_panel">PanelActivity</string>
-    <string name="energy_info">Aqui você pode configurar os valores relacionados a de geração energia</string>
+    <string name="energy_info">Aqui você pode configurar os valores relacionados a geração de energia</string>
     <string name="panel_info">Aqui você pode configurar os valores relacionados ao painel solar</string>
     <string name="save">Save</string>
     <string name="per_odo_de_tempo">Período de tempo para cálculo</string>
+    <string name="valor_do_kwh">Valor do kWh</string>
+    <string name="numero_de_c_lulas_para_c_lculo">Numero de células para cálculo</string>
+    <string name="_1_un">1.un</string>
+    <string name="taxa_de_efici_ncia_da_c_lula">Taxa de eficiência da célula</string>
     <string-array name="periodos">
         <item>Diário</item>
         <item>Semanal</item>
