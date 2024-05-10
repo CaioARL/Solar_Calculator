@@ -9,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -87,11 +86,21 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences.Editor editor = preferences.edit();
 
-        if(!preferences.contains("taxa") && !preferences.contains("preco")){
-            editor.remove("taxa");
+        if(!preferences.contains("taxa")){
             editor.putFloat("taxa", 20F);
-            editor.putFloat("preco", 0.5F);
-            editor.apply();
         }
+
+        if(!preferences.contains("preco")){
+            editor.putFloat("preco", 0.5F);
+        }
+
+        if(!preferences.contains("periodo")){
+            editor.putInt("periodo", 0);
+        }
+
+        if(!preferences.contains("qtde_celula")){
+            editor.putInt("qtde_celula", 1);
+        }
+        editor.apply();
     }
 }
