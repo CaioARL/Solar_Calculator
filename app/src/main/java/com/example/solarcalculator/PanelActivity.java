@@ -41,10 +41,10 @@ public class PanelActivity extends AppCompatActivity {
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
         taxa = findViewById(R.id.editTaxa);
-        taxa.setHint(String.valueOf(preferences.getFloat("taxa", 20F)) + "%");
+        taxa.setHint(preferences.getFloat("taxa", 20F) + "%");
 
         qtdeCelula = findViewById(R.id.editCelula);
-        qtdeCelula.setHint(String.valueOf(preferences.getInt("qtde_celula", 1)) + ".un");
+        qtdeCelula.setHint(preferences.getInt("qtde_celula", 1) + ".un");
 
         btnSave = findViewById(R.id.btnSavePanel);
         btnBack = findViewById(R.id.btnBack);
@@ -54,8 +54,8 @@ public class PanelActivity extends AppCompatActivity {
             setTaxa(convertTaxa(taxa));
             setQtdeCelula(convertQtdeCelula(qtdeCelula));
 
-            taxa.setHint(String.valueOf(preferences.getFloat("taxa", 20F)) + "%");
-            qtdeCelula.setHint(String.valueOf(preferences.getInt("qtde_celula", 1)) + ".un");
+            taxa.setHint(preferences.getFloat("taxa", 20F) + "%");
+            qtdeCelula.setHint(preferences.getInt("qtde_celula", 1) + ".un");
 
             taxa.clearFocus();
             taxa.setText("");
