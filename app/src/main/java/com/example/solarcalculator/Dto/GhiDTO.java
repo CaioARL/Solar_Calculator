@@ -3,10 +3,10 @@ package com.example.solarcalculator.Dto;
 public class GhiDTO {
 
     private Long id;
-    private String uf;
+    private String country;
     private String lon;
     private String lat;
-    private Long anual;
+    private Long annual;
     private Long jan;
     private Long fev;
     private Long mar;
@@ -28,12 +28,12 @@ public class GhiDTO {
         this.id = id;
     }
 
-    public String getUf() {
-        return uf;
+    public String getCountry() {
+        return country;
     }
 
-    public void setUf(String uf) {
-        this.uf = uf;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getLon() {
@@ -52,13 +52,9 @@ public class GhiDTO {
         this.lat = lat;
     }
 
-    public Long getAnual() {
-        return anual;
-    }
+    public Long getAnnual() { return annual; }
 
-    public void setAnual(Long anual) {
-        this.anual = anual;
-    }
+    public void setAnnual(Long annual) { this.annual = annual; }
 
     public Long getJan() {
         return jan;

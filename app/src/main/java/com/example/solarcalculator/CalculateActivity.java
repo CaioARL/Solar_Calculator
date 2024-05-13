@@ -3,6 +3,7 @@ package com.example.solarcalculator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,7 +25,6 @@ import java.io.InputStreamReader;
 import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.time.LocalDate;
 import java.util.TimeZone;
 
 public class CalculateActivity extends AppCompatActivity {
@@ -81,11 +81,12 @@ public class CalculateActivity extends AppCompatActivity {
             }
         }
 
+//        Setando valores finais nos campos de texto
         energy.setText(String.format("%s kWh", String.format(Double.toString(energiaGerada))));
-        money.setText(String.format("R$%s", String.format(Double.toString(energiaGerada*preferences.getFloat("preco", 0.5F)))));
+        money.setText(String.format("R$%s", String.format(Double.toString((double) Math.round((energiaGerada * preferences.getFloat("preco", 0.5F)) * 100) /100))));
     }
 
-    private Double doCalc(String latitude, String longitude) throws IOException, CsvException {
+    private double doCalc(String latitude, String longitude) throws IOException, CsvException {
         Calendar calendar = Calendar.getInstance();
 
         // Periodo em dias
@@ -101,7 +102,7 @@ public class CalculateActivity extends AppCompatActivity {
         double horasExposicaoSolar = calculateSolarExposureHours(Double.parseDouble(latitude) , Double.parseDouble(longitude));
 
         // Irradiação solar em kW/m² (valor médio para o local)
-        double irradiacaoSolar = periodo==2?findByLatLon(latitude, longitude).getAnual():findByLatLon(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
+        double irradiacaoSolar = periodo==2?findByLatLon(latitude, longitude).getAnnual():findByLatLon(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
 
         // Cálculo da energia gerada pelo painel solar em kWh
         double energiaGerada = preferences.getInt("qtde_celula", 1) * (areaPainel * (irradiacaoSolar/1000.0) * (eficienciaPainel / 100) * horasExposicaoSolar);
@@ -116,14 +117,32 @@ public class CalculateActivity extends AppCompatActivity {
             return Math.round((energiaGerada*365) * 100.0) / 100.0;
         }
 
-        return null;
+        return 0D;
     }
 
     public GhiDTO findByLatLon(String latitude, String longitude) throws IOException, CsvException {
         CordenadasDTO cordenadas = new CordenadasDTO(latitude, longitude);
 
+        // Incidência para base de dados
+        int incidencia = preferences.getInt("incidencia", 0);
+
         // Obtendo o InputStream do arquivo CSV na pasta "raw"
-        InputStream inputStream = getResources().openRawResource(R.raw.global_horizontal_means);
+        InputStream inputStream = null;
+        if(incidencia==0){
+            inputStream = getResources().openRawResource(R.raw.global_horizontal_means);
+        }
+        if(incidencia==1){
+            inputStream = getResources().openRawResource(R.raw.direct_normal_means);
+        }
+        if(incidencia==2){
+            inputStream = getResources().openRawResource(R.raw.tilted_latitude_means);
+        }
+        if(incidencia==3){
+            inputStream = getResources().openRawResource(R.raw.diffuse_means);
+        }
+        if(incidencia==4){
+            inputStream = getResources().openRawResource(R.raw.par_means);
+        }
 
         // Criando um InputStreamReader para o InputStream
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -136,16 +155,16 @@ public class CalculateActivity extends AppCompatActivity {
 
         // Criar a lista para armazenar os objetos GhiDTO
         List<GhiDTO> ghis = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             ghis = csvReader.readAll().stream()
                     .map(line -> {
                         String[] parts = line[0].split(";");
                         GhiDTO ghi = new GhiDTO();
                         ghi.setId(Long.parseLong(parts[0]));
-                        ghi.setUf(parts[1]);
+                        ghi.setCountry(parts[1]);
                         ghi.setLon(parts[2]);
                         ghi.setLat(parts[3]);
-                        ghi.setAnual(Long.parseLong(parts[4]));
+                        ghi.setAnnual(Long.parseLong(parts[4]));
                         ghi.setJan(Long.parseLong(parts[5]));
                         ghi.setFev(Long.parseLong(parts[6]));
                         ghi.setMar(Long.parseLong(parts[7]));
@@ -194,10 +213,6 @@ public class CalculateActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         int dayOfYear = calendar.get(Calendar.DAY_OF_YEAR);
         TimeZone timeZone = calendar.getTimeZone();
-        LocalDate date = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            date = LocalDate.ofEpochDay(calendar.get(Calendar.DATE));
-        }
 
         // Calcular a declinação solar
         double declination = calculateSolarDeclination(dayOfYear);

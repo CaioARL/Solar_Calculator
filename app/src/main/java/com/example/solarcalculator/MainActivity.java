@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity {
             editor.putFloat("area_celula", 1.5F);
         }
 
+        if(!preferences.contains("incidencia")){
+            editor.putInt("incidencia", 0);
+        }
+
         editor.apply();
     }
 }

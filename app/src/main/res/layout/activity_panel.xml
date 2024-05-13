@@ -21,6 +21,30 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/base_de_dados_para_c_lculo"
+        android:textAlignment="center"
+        android:textSize="25sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Spinner
+        android:id="@+id/spinnerIncidencia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:minHeight="50dp"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
+
+    <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,19 +55,18 @@
         android:textSize="25sp"
         android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/spinnerIncidencia" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editCelula"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
+        android:layout_marginEnd="15dp"
         android:hint="@string/_1_un"
         android:inputType="number|numberDecimal"
         android:textColorHint="#78909C"
         android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editArea"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <TextView
@@ -51,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginTop="15dp"
         android:text="@string/rea_total_do_painel_solar_em_m"
         android:textAlignment="center"
         android:textSize="25sp"
@@ -63,20 +86,19 @@
         android:id="@+id/editArea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:hint="@string/_1_5m"
         android:inputType="number|numberDecimal"
         android:textColorHint="#78909C"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="15dp"
         android:text="@string/taxa_de_efici_ncia_da_c_lula"
         android:textAlignment="center"
         android:textSize="25sp"
@@ -89,14 +111,13 @@
         android:id="@+id/editTaxa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginEnd="15dp"
         android:hint="@string/_0_2"
         android:inputType="number|numberDecimal"
         android:textColorHint="#78909C"
         android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintEnd_toEndOf="@+id/btnSavePanel"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <Button
         android:id="@+id/btnSavePanel"
@@ -116,8 +137,8 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="105dp"
-        android:layout_marginBottom="105dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginBottom="100dp"
         android:text="@string/back"
         android:textAlignment="center"
         android:textAllCaps="false"
