@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
 
         btnCalculate.setOnClickListener(v -> {
             String latitude = textLat.getText().toString();
-            String longitude = textLat.getText().toString();
+            String longitude = textLon.getText().toString();
 
             if (!latitude.isEmpty() && !longitude.isEmpty() && !(latitude.equals("0.0000000") && longitude.equals("0.0000000"))) {
             Intent intent = new Intent(SearchActivity.this, CalculateActivity.class);
@@ -113,8 +113,6 @@ public class SearchActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     try {
                         textError = findViewById(R.id.textViewError);
-                        textError.setTextColor(getResources().getColor(R.color.amarelo));
-                        textError.setText("Caso necessário altere os valor de configurações (Preço kilowatt-hora ou Taxa de incidência) no menu inicial");
 
                         assert response.body() != null;
 
@@ -126,11 +124,22 @@ public class SearchActivity extends AppCompatActivity {
 
                         if (!placeList.isEmpty()) {
                             PlaceDTO dto = placeList.get(0);
+
+                            if(!dto.getDisplayName().toLowerCase().contains("brasil") && !dto.getDisplayName().toLowerCase().contains("brazil")){
+                                textAddress.setText("Endereço não encontrado no Brasil");
+                                textLat.setText("0.0000000");
+                                textLon.setText("0.0000000");
+                                return;
+                            }
+
                             loadOpenStreetMap(convertToBoundingBoxDTO(dto.getBoundingbox()));
                             textAddress.setText(dto.getDisplayName());
                             textLat.setText(dto.getLat());
                             textLon.setText(dto.getLon());
-                        }else{
+                            textError.setTextColor(getResources().getColor(R.color.amarelo));
+                            textError.setText("Caso necessário altere os valor de configurações no menu inicial");
+                        }
+                        else{
                             textAddress.setText("Endereço não encontrado");
                             textLat.setText("0.0000000");
                             textLon.setText("0.0000000");

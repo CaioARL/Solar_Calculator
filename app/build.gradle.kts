@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.opencsv)
     implementation (libs.gson)
     implementation(libs.okhttp)
     implementation(libs.appcompat)
