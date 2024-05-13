@@ -32,9 +32,19 @@
     <string name="numero_de_c_lulas_para_c_lculo">Numero de células para cálculo</string>
     <string name="_1_un">1.un</string>
     <string name="taxa_de_efici_ncia_da_c_lula">Taxa de eficiência da célula</string>
+    <string name="rea_total_do_painel_solar_em_m">Área total do painel solar em m²</string>
+    <string name="_1_5m">1,5m²</string>
+    <string name="base_de_dados_para_c_lculo">Base de dados para cálculo</string>
     <string-array name="periodos">
         <item>Diário</item>
-        <item>Semanal</item>
         <item>Mensal</item>
+        <item>Anual</item>
+    </string-array>
+    <string-array name="incidencia">
+        <item>Irradiação Global Horizontal</item>
+        <item>Irradiação Direta Normal</item>
+        <item>Irradiação no Plano Inclinado</item>
+        <item>Irradiação Difusa</item>
+        <item>Irradiação Fotossinteticamente Ativa</item>
     </string-array>
 </resources>
