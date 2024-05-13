@@ -1,11 +1,9 @@
 package com.example.solarcalculator;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,6 +12,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.solarcalculator.Dto.GhiDTO;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Calendar;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CalculateActivity extends AppCompatActivity {
@@ -37,114 +46,122 @@ public class CalculateActivity extends AppCompatActivity {
             return insets;
         });
 
+        btnNewAddress = findViewById(R.id.btnBack);
+        energy = findViewById(R.id.textEnergy);
+        money = findViewById(R.id.textMoney);
+        String latitude = null, longitude = null;
+        double energiaGerada = 0D;
+
+//        informações salvas
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
-        btnNewAddress = findViewById(R.id.btnBack);
+
+//        Quando botao new adress pressionado
         btnNewAddress.setOnClickListener(v -> {
             Intent intent = new Intent(CalculateActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
-        energy = findViewById(R.id.textEnergy);
-        money = findViewById(R.id.textMoney);
-
+//        Pega latitude e longitude
         Intent intent = getIntent();
         if (intent != null) {
-            String latitude = intent.getStringExtra("LATITUDE");
-            String longitude = intent.getStringExtra("LONGITUDE");
+            latitude = intent.getStringExtra("LATITUDE");
+            longitude = intent.getStringExtra("LONGITUDE");
+        }
+
+        assert latitude != null;
+        assert longitude != null;
+        if(!latitude.isEmpty() && !longitude.isEmpty()){
             try {
-                String generatedEnergy = doCalc(latitude, longitude);
-                energy.setText(doCalc(latitude, longitude));
-                money.setText(doMoney(generatedEnergy, preferences.getFloat("preco", 0.50F), preferences.getFloat("taxa", 20F)));
-            } catch (Exception e) {
-                Log.e("TAG", "Erro no metodo onCreate");
+                energiaGerada = doCalc(latitude, longitude);
+            } catch (IOException | CsvException e) {
                 throw new RuntimeException(e);
             }
         }
+
+        energy.setText(String.format(Double.toString(energiaGerada)));
+//        money.setText(doMoney(generatedEnergy, preferences.getFloat("preco", 0.50F), preferences.getFloat("taxa", 20F)));
     }
 
-    @SuppressLint("DefaultLocale")
-    private String doCalc(String latitude, String longitude) {
-        try {
-            // Declinação solar (em radianos)
-            double declinacaoSolar = calcularDeclinacaoSolar();
+    private Double doCalc(String latitude, String longitude) throws IOException, CsvException {
 
-            // Duração do dia em horas
-            double duracaoDoDia = 24;
+        // Área do painel solar em metros quadrados (m²)
+        double areaPainel = preferences.getFloat("area_celula", 1.5F);
 
-            // Irradiação solar média (em W/m²)
-            double irradiacaoSolarMedia = 0;
+        // Eficiência do painel solar (como um valor percentual)
+        double eficienciaPainel = preferences.getFloat("taxa", 20F);
 
-            // Loop para calcular a irradiação solar média ao longo de 24 horas
-            for (int hora = 0; hora < 24; hora++) {
-                // Ângulo horário (em radianos)
-                double anguloHorario = calcularAnguloHorario(hora, Double.parseDouble(longitude));
+        // Dia do ano
+        Calendar calendar = Calendar.getInstance();
+        int N = calendar.get(Calendar.DAY_OF_YEAR);
 
-                // Ângulo de elevação solar (em radianos)
-                double anguloElevacaoSolar = calcularAnguloElevacaoSolar(Double.parseDouble(latitude), declinacaoSolar, anguloHorario);
+        // Conversão da latitude para radianos
+        double latitudeRad = Math.toRadians(Double.parseDouble(latitude));
 
-                // Intensiveness solar máxima (em W/m²)
-                double intensidadeSolarMaxima = 1000; // Estimativa aproximada da intensidade solar máxima
+        // Cálculo da declinação solar
+        double delta = 0.409 * Math.sin((2 * Math.PI * (N - 1) / 365) - 1.39);
 
-                // Se o ângulo de elevação solar for positivo (sol acima do horizonte)
-                if (anguloElevacaoSolar > 0) {
-                    // Adiciona a contribuição da irradiação solar nesta hora
-                    irradiacaoSolarMedia += intensidadeSolarMaxima * Math.sin(anguloElevacaoSolar);
-                }
+        // Cálculo das horas de exposição solar
+        double horasExposicaoSolar = (1 / Math.PI) * (Math.acos(-Math.tan(latitudeRad) * Math.tan(delta)) + (Math.PI / 12));
+
+        // Irradiação solar em kW/m² (valor médio para o local)
+        double irradiacaoSolar = findByLatLon(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
+
+        // Cálculo da energia gerada pelo painel solar em kWh
+        return areaPainel * irradiacaoSolar * eficienciaPainel * horasExposicaoSolar;
+    }
+
+    public GhiDTO findByLatLon(String latitude, String longitude) throws IOException, CsvException {
+        // Obtendo o InputStream do arquivo CSV na pasta "raw"
+        InputStream inputStream = getResources().openRawResource(R.raw.global_horizontal_means);
+
+        // Criando um InputStreamReader para o InputStream
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+
+        // Usando OpenCSV para criar o CSVReader
+        CSVReader csvReader = new CSVReader(inputStreamReader);
+
+        // Pular linha de cabeçalho
+        csvReader.skip(1);
+
+        // Criar a lista para armazenar os objetos GhiDTO
+        List<GhiDTO> ghis = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            ghis = csvReader.readAll().stream()
+                    .map(line -> {
+                        String[] parts = line[0].split(";");
+                        GhiDTO ghi = new GhiDTO();
+                        ghi.setId(Long.parseLong(parts[0]));
+                        ghi.setUf(parts[1]);
+                        ghi.setLon(parts[2]);
+                        ghi.setLat(parts[3]);
+                        ghi.setAnual(Long.parseLong(parts[4]));
+                        ghi.setJan(Long.parseLong(parts[5]));
+                        ghi.setFev(Long.parseLong(parts[6]));
+                        ghi.setMar(Long.parseLong(parts[7]));
+                        ghi.setAbr(Long.parseLong(parts[8]));
+                        ghi.setMai(Long.parseLong(parts[9]));
+                        ghi.setJun(Long.parseLong(parts[10]));
+                        ghi.setJul(Long.parseLong(parts[11]));
+                        ghi.setAgo(Long.parseLong(parts[12]));
+                        ghi.setSet(Long.parseLong(parts[13]));
+                        ghi.setOut(Long.parseLong(parts[14]));
+                        ghi.setNov(Long.parseLong(parts[15]));
+                        ghi.setDec(Long.parseLong(parts[16]));
+                        return ghi;
+                    })
+                    .collect(Collectors.toList());
+        }
+
+        // Pesquisar na lista pelo objeto com a latitude e longitude especificadas
+        assert ghis != null;
+        for (GhiDTO ghi : ghis) {
+            if (ghi.getLat().equals(latitude) && ghi.getLon().equals(longitude)) {
+                return ghi; // Retorne o objeto quando for encontrado
             }
-
-            // Divide pelo número de horas para obter a média
-            irradiacaoSolarMedia /= 24;
-
-            // Converter a irradiação solar média de Wh/m² para kWh/m²
-            double energiaTotalKWh = irradiacaoSolarMedia * duracaoDoDia / 1000;
-
-            return String.format("%.2f kWh/m²", energiaTotalKWh);
-        } catch (Exception e) {
-            Log.e("TAG", "Erro no método doCalc");
-            throw new RuntimeException(e);
         }
+
+        // Retornar null se não encontrar nenhum objeto com a latitude e longitude especificadas
+        return null;
     }
-
-    public static double calcularDeclinacaoSolar() {
-        // Dia do ano (0 a 365, onde 0 é 1 de janeiro)
-        int diaDoAno = 120; // Exemplo de 1º de maio
-
-        // Ângulo de declinação solar (em radianos)
-        double declinacaoSolar = 23.45 * Math.sin(Math.toRadians(360 * (284 + diaDoAno) / 365.0));
-
-        return Math.toRadians(declinacaoSolar);
-    }
-
-    public static double calcularAnguloElevacaoSolar(double latitude, double declinacaoSolar, double anguloHorario) {
-        // Ângulo de elevação solar (em radianos)
-
-        return Math.asin(Math.sin(Math.toRadians(latitude)) * Math.sin(declinacaoSolar)
-                + Math.cos(Math.toRadians(latitude)) * Math.cos(declinacaoSolar) * Math.cos(anguloHorario));
-    }
-
-    public static double calcularAnguloHorario(int hora, double longitude) {
-        // Ângulo horário (em radianos)
-        return Math.toRadians(15 * (hora - 12) + longitude / 15);
-    }
-
-    @SuppressLint("DefaultLocale")
-    public String doMoney(String energiaSolarGerada, Float precoEnergia, Float taxaConversao) {
-        try {
-            // Substituir vírgulas por pontos
-            energiaSolarGerada = energiaSolarGerada.replace(",", ".").replace("kWh/m²", "");
-
-            // Converter a energia solar gerada para quilowatts
-            float energiaSolarKW = Float.parseFloat(energiaSolarGerada);
-
-            // Calcular o dinheiro gerado
-            Float valor = (energiaSolarKW * precoEnergia * taxaConversao)/100;
-
-            return String.format("R$%.2f", valor);
-        } catch (Exception e) {
-            Log.e("TAG", "Erro no metodo doMoney", e);
-            throw new RuntimeException(e);
-        }
-    }
-
 }

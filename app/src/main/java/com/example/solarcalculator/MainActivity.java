@@ -101,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
         if(!preferences.contains("qtde_celula")){
             editor.putInt("qtde_celula", 1);
         }
+
+        if(!preferences.contains("area_celula")){
+            editor.putFloat("area_celula", 1.5F);
+        }
+
         editor.apply();
     }
 }

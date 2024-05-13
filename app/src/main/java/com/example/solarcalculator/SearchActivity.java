@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
 
         btnCalculate.setOnClickListener(v -> {
             String latitude = textLat.getText().toString();
-            String longitude = textLat.getText().toString();
+            String longitude = textLon.getText().toString();
 
             if (!latitude.isEmpty() && !longitude.isEmpty() && !(latitude.equals("0.0000000") && longitude.equals("0.0000000"))) {
             Intent intent = new Intent(SearchActivity.this, CalculateActivity.class);

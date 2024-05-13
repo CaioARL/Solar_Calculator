@@ -22,6 +22,8 @@ public class PanelActivity extends AppCompatActivity {
 
     EditText qtdeCelula;
 
+    EditText areaCelula;
+
     Button btnSave;
 
     Button btnBack;
@@ -46,22 +48,33 @@ public class PanelActivity extends AppCompatActivity {
         qtdeCelula = findViewById(R.id.editCelula);
         qtdeCelula.setHint(preferences.getInt("qtde_celula", 1) + ".un");
 
+        areaCelula = findViewById(R.id.editArea);
+        areaCelula.setHint(preferences.getFloat("area_celula", 1.5F) + "m²");
+
         btnSave = findViewById(R.id.btnSavePanel);
         btnBack = findViewById(R.id.btnBack);
 
 //        Quando botao salvar presionado
         btnSave.setOnClickListener(v -> {
+//            sets
             setTaxa(convertTaxa(taxa));
             setQtdeCelula(convertQtdeCelula(qtdeCelula));
+            setAreaCelula(convertAreaCelula(areaCelula));
 
+//            hints
             taxa.setHint(preferences.getFloat("taxa", 20F) + "%");
             qtdeCelula.setHint(preferences.getInt("qtde_celula", 1) + ".un");
+            areaCelula.setHint(preferences.getFloat("area_celula", 1.5F) + "m²");
 
+//            clear focus e text
             taxa.clearFocus();
             taxa.setText("");
 
             qtdeCelula.clearFocus();
             qtdeCelula.setText("");
+
+            areaCelula.clearFocus();
+            areaCelula.setText("");
 
             Toast.makeText(this, "Panel Saved", Toast.LENGTH_SHORT).show();
         });
@@ -73,6 +86,8 @@ public class PanelActivity extends AppCompatActivity {
         });
 
     }
+
+//    PRIVATES
 
     private Float convertTaxa(EditText taxa){
         if(taxa!=null && taxa.getText() != null &&
@@ -103,6 +118,22 @@ public class PanelActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putInt("qtde_celula", qtdeCelulaValue);
+        editor.apply();
+    }
+
+    private Float convertAreaCelula(EditText areaCelula) {
+        if (areaCelula != null && areaCelula.getText() != null &&
+                !areaCelula.getText().toString().isEmpty()) {
+            return Float.parseFloat(areaCelula.getText().toString().replace("m²", ""));
+        } else {
+            return preferences.getFloat("area_celula", 1.5F);
+        }
+    }
+
+    private void setAreaCelula(Float areaCelulaValue){
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putFloat("area_celula", areaCelulaValue);
         editor.apply();
     }
 }
