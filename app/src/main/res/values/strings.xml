@@ -36,7 +36,7 @@
     <string name="_1_5m">1,5m²</string>
     <string-array name="periodos">
         <item>Diário</item>
-        <item>Semanal</item>
         <item>Mensal</item>
+        <item>Anual</item>
     </string-array>
 </resources>
