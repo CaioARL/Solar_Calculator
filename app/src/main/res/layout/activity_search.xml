@@ -21,13 +21,12 @@
     <WebView
         android:id="@+id/webView"
         android:layout_width="0dp"
-        android:layout_height="340dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"/>
+        app:layout_constraintHeight_percent="0.35"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/textViewLat"
@@ -52,12 +51,14 @@
         android:id="@+id/textViewLon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="268dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="@string/longitude"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/textViewLat"
-        app:layout_constraintTop_toBottomOf="@+id/webView" />
+        app:layout_constraintTop_toBottomOf="@+id/webView"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:per=""/>
 
     <TextView
         android:id="@+id/textLon"
@@ -101,7 +102,7 @@
         android:id="@+id/btnCalculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="16dp"
         android:text="@string/calculate"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -124,7 +125,7 @@
         android:textStyle="bold"
         app:icon="@android:drawable/ic_menu_revert"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.500"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCalculate"
         tools:ignore="VisualLintBounds" />
