@@ -19,17 +19,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class EnergyActivity extends AppCompatActivity {
-
     SharedPreferences preferences;
-
     EditText preco;
-
     Button btnSave;
-
     Button btnBack;
-
     Spinner periodoMenu;
-
     Boolean selectChanged = false;
 
     @Override
@@ -43,7 +37,20 @@ public class EnergyActivity extends AppCompatActivity {
             return insets;
         });
 
-//        Informações salvas no armazenamento do dipositivo
+        // Inicializa elementos da tela e atribui as funções para os botões e selects
+        this.initElements();
+        this.setButtonAndSelectFunctions();
+
+        //Configurando listagem de periodos
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.periodos, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        periodoMenu.setAdapter(adapter);
+        periodoMenu.setSelection(preferences.getInt("periodo", 0));
+    }
+
+    // ##PRIVATES##
+    private void initElements() {
+        //Informações salvas no armazenamento do dipositivo
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
         preco = findViewById(R.id.editPreco);
@@ -52,14 +59,11 @@ public class EnergyActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSaveEnergy);
         btnBack = findViewById(R.id.btnBack);
 
-//        Configurando listagem de periodos
         periodoMenu = findViewById(R.id.spinnerPeriodos);
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.periodos, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        periodoMenu.setAdapter(adapter);
-        periodoMenu.setSelection(preferences.getInt("periodo", 0));
+    }
 
-//        Quando botao salvar pressionado
+    private void setButtonAndSelectFunctions() {
+        //Quando botao salvar pressionado
         btnSave.setOnClickListener(v -> {
             setPreco(convertPreco(preco));
 
@@ -75,13 +79,13 @@ public class EnergyActivity extends AppCompatActivity {
             Toast.makeText(this, "Energy Saved", Toast.LENGTH_SHORT).show();
         });
 
-//        Quando botao voltar pressionado
+        //Quando botao voltar pressionado
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(EnergyActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
-//        Quando periodo for selecionado
+        //Quando periodo for selecionado
         periodoMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -91,9 +95,9 @@ public class EnergyActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
     }
 
+    // ## CONVERTS E SETS ##
     private Float convertPreco(EditText preco){
         if(preco!=null && preco.getText() != null &&
                 !preco.getText().toString().isEmpty()){

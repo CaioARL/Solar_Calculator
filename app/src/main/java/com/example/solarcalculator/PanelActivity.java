@@ -19,21 +19,13 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class PanelActivity extends AppCompatActivity {
-
     SharedPreferences preferences;
-
     EditText taxa;
-
     EditText qtdeCelula;
-
     EditText areaCelula;
-
     Spinner incidenciaMenu;
-
     Button btnSave;
-
     Button btnBack;
-
     Boolean selectChanged = false;
 
     @Override
@@ -47,7 +39,20 @@ public class PanelActivity extends AppCompatActivity {
             return insets;
         });
 
-//        Informações salvas no armazenamento do dipositivo
+        // Inicializa elementos da tela e atribui as funções para os botões e selects
+        this.initElements();
+        this.setButtonAndSelectFunctions();
+
+        //Configurando listagem
+        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.incidencia, android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        incidenciaMenu.setAdapter(adapter);
+        incidenciaMenu.setSelection(preferences.getInt("incidencia", 0));
+    }
+
+    // ## PRIVATES ##
+    private void initElements() {
+        //Informações salvas no armazenamento do dipositivo
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
         taxa = findViewById(R.id.editTaxa);
@@ -62,31 +67,28 @@ public class PanelActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSavePanel);
         btnBack = findViewById(R.id.btnBack);
 
-//        Configurando listagem
         incidenciaMenu = findViewById(R.id.spinnerIncidencia);
-        ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(this, R.array.incidencia, android.R.layout.simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        incidenciaMenu.setAdapter(adapter);
-        incidenciaMenu.setSelection(preferences.getInt("incidencia", 0));
+    }
 
-//        Quando botao salvar presionado
+    private void setButtonAndSelectFunctions() {
+        //Quando botao salvar presionado
         btnSave.setOnClickListener(v -> {
-//            sets
+            //sets
             setTaxa(convertTaxa(taxa));
             setQtdeCelula(convertQtdeCelula(qtdeCelula));
             setAreaCelula(convertAreaCelula(areaCelula));
 
-//            hints
+            //hints
             taxa.setHint(preferences.getFloat("taxa", 20F) + "%");
             qtdeCelula.setHint(preferences.getInt("qtde_celula", 1) + ".un");
             areaCelula.setHint(preferences.getFloat("area_celula", 1.5F) + "m²");
 
-//            Selcted
+            //Selcted
             if(selectChanged){
                 setIncidencia(incidenciaMenu.getSelectedItemPosition());
             }
 
-//            clear focus e text
+            //clear focus e text
             taxa.clearFocus();
             taxa.setText("");
 
@@ -99,13 +101,13 @@ public class PanelActivity extends AppCompatActivity {
             Toast.makeText(this, "Panel Saved", Toast.LENGTH_SHORT).show();
         });
 
-//        Quando botao voltar pressionado
+        //Quando botao voltar pressionado
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(PanelActivity.this, MainActivity.class);
             startActivity(intent);
         });
 
-//        Quando incidencia for selecionada
+        //Quando incidencia for selecionada
         incidenciaMenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -115,11 +117,9 @@ public class PanelActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
-
     }
 
-//    PRIVATES
-
+    // ## CONVERTS E SETS ##
     private Float convertTaxa(EditText taxa){
         if(taxa!=null && taxa.getText() != null &&
                 !taxa.getText().toString().isEmpty()){
