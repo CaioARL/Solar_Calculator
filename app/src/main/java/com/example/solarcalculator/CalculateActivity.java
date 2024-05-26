@@ -17,7 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.solarcalculator.Dto.CordenadasDTO;
-import com.example.solarcalculator.Dto.GhiDTO;
+import com.example.solarcalculator.Dto.GiDTO;
 import com.example.solarcalculator.Dto.SunriseSunsetDTO;
 import com.google.gson.Gson;
 import com.opencsv.CSVReader;
@@ -163,7 +163,7 @@ public class CalculateActivity extends AppCompatActivity {
         return 0D;
     }
 
-    public GhiDTO findByCoordinates(String latitude, String longitude) throws IOException, CsvException {
+    public GiDTO findByCoordinates(String latitude, String longitude) throws IOException, CsvException {
         CordenadasDTO cordenadas = new CordenadasDTO(latitude, longitude);
 
         // Incidência para base de dados
@@ -181,31 +181,31 @@ public class CalculateActivity extends AppCompatActivity {
         // Pular linha de cabeçalho
         csvReader.skip(1);
 
-        // Criar a lista para armazenar os objetos GhiDTO
-        List<GhiDTO> ghis = null;
+        // Criar a lista para armazenar os objetos giDTO
+        List<GiDTO> gis = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            ghis = csvReader.readAll().stream()
+            gis = csvReader.readAll().stream()
                     .map(line -> {
                         String[] parts = line[0].split(";");
-                        GhiDTO ghi = new GhiDTO();
-                        ghi.setId(Long.parseLong(parts[0]));
-                        ghi.setCountry(parts[1]);
-                        ghi.setLon(parts[2]);
-                        ghi.setLat(parts[3]);
-                        ghi.setAnnual(Long.parseLong(parts[4]));
-                        ghi.setJan(Long.parseLong(parts[5]));
-                        ghi.setFev(Long.parseLong(parts[6]));
-                        ghi.setMar(Long.parseLong(parts[7]));
-                        ghi.setAbr(Long.parseLong(parts[8]));
-                        ghi.setMai(Long.parseLong(parts[9]));
-                        ghi.setJun(Long.parseLong(parts[10]));
-                        ghi.setJul(Long.parseLong(parts[11]));
-                        ghi.setAgo(Long.parseLong(parts[12]));
-                        ghi.setSet(Long.parseLong(parts[13]));
-                        ghi.setOut(Long.parseLong(parts[14]));
-                        ghi.setNov(Long.parseLong(parts[15]));
-                        ghi.setDec(Long.parseLong(parts[16]));
-                        return ghi;
+                        GiDTO gi = new GiDTO();
+                        gi.setId(Long.parseLong(parts[0]));
+                        gi.setCountry(parts[1]);
+                        gi.setLon(parts[2]);
+                        gi.setLat(parts[3]);
+                        gi.setAnnual(Long.parseLong(parts[4]));
+                        gi.setJan(Long.parseLong(parts[5]));
+                        gi.setFev(Long.parseLong(parts[6]));
+                        gi.setMar(Long.parseLong(parts[7]));
+                        gi.setAbr(Long.parseLong(parts[8]));
+                        gi.setMai(Long.parseLong(parts[9]));
+                        gi.setJun(Long.parseLong(parts[10]));
+                        gi.setJul(Long.parseLong(parts[11]));
+                        gi.setAgo(Long.parseLong(parts[12]));
+                        gi.setSet(Long.parseLong(parts[13]));
+                        gi.setOut(Long.parseLong(parts[14]));
+                        gi.setNov(Long.parseLong(parts[15]));
+                        gi.setDec(Long.parseLong(parts[16]));
+                        return gi;
                     })
                     .collect(Collectors.toList());
         }
@@ -220,21 +220,21 @@ public class CalculateActivity extends AppCompatActivity {
         double tolerance = 0.3; // Ajuste conforme necessário
 
         // Pesquisar na lista pelo objeto com a latitude e longitude aproximadas
-        assert ghis != null;
-        GhiDTO closestGhi = null;
+        assert gis != null;
+        GiDTO closestGi = null;
         double minDistance = Double.MAX_VALUE;
-        for (GhiDTO ghi : ghis) {
-            double lat = Double.parseDouble(ghi.getLat());
-            double lon = Double.parseDouble(ghi.getLon());
+        for (GiDTO gi : gis) {
+            double lat = Double.parseDouble(gi.getLat());
+            double lon = Double.parseDouble(gi.getLon());
             double distance = Math.sqrt(Math.pow(lat - targetLat, 2) + Math.pow(lon - targetLon, 2));
             if (distance < tolerance && distance < minDistance) {
-                closestGhi = ghi;
+                closestGi = gi;
                 minDistance = distance;
             }
         }
 
         // Retornar o objeto mais próximo encontrado
-        return closestGhi;
+        return closestGi;
     }
 
     private InputStream getInputStreamByIncidencia(int incidencia) {

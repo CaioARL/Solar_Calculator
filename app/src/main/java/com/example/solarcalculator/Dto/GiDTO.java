@@ -1,6 +1,6 @@
 package com.example.solarcalculator.Dto;
 
-public class GhiDTO {
+public class GiDTO {
 
     private Long id;
     private String country;
