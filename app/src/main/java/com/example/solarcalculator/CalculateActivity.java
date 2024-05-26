@@ -39,17 +39,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class CalculateActivity extends AppCompatActivity {
-
     OkHttpClient client;
-
     SharedPreferences preferences;
-
     TextView energy;
-
     TextView money;
-
     Button btnNewAddress;
-
     SunriseSunsetDTO sunInfo;
 
     @Override
@@ -63,28 +57,44 @@ public class CalculateActivity extends AppCompatActivity {
             return insets;
         });
 
-        btnNewAddress = findViewById(R.id.btnBack);
-        energy = findViewById(R.id.textEnergy);
-        money = findViewById(R.id.textMoney);
-        String latitude = null, longitude = null;
-        client = new OkHttpClient();
+        // Inicializa elementos da tela e atribui as funções para os botões e selects
+        this.initElements();
+        this.setButtonAndSelectFunctions();
 
+        // Realiza cáculos
+        this.doCalc();
+    }
+
+    // ## PRIVATES ##
+    private void initElements(){
         // informações salvas
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
+        btnNewAddress = findViewById(R.id.btnBack);
+        energy = findViewById(R.id.textEnergy);
+        money = findViewById(R.id.textMoney);
+        client = new OkHttpClient();
+    }
+
+    private void setButtonAndSelectFunctions(){
         // Quando botao new adress pressionado
         btnNewAddress.setOnClickListener(v -> {
             Intent intent = new Intent(CalculateActivity.this, MainActivity.class);
             startActivity(intent);
         });
+    }
 
+    // Função de transição para o doCalc principal, verifica coordenadas informadas anteriormente(SearchActivity)
+    private void doCalc(){
         // Pega latitude e longitude
+        String latitude = null, longitude = null;
         Intent intent = getIntent();
         if (intent != null) {
             latitude = intent.getStringExtra("LATITUDE");
             longitude = intent.getStringExtra("LONGITUDE");
         }
 
+        // Verifica null e executa calculo
         assert latitude != null;
         assert longitude != null;
         if (!latitude.isEmpty() && !longitude.isEmpty()) {
@@ -113,8 +123,8 @@ public class CalculateActivity extends AppCompatActivity {
             // Irradiação solar em kW/m² (valor médio para o local)
             double irradiacaoSolar = 0;
             try {
-                irradiacaoSolar = periodo == 2 ? findByLatLon(latitude, longitude).getAnnual()
-                        : findByLatLon(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
+                irradiacaoSolar = periodo == 2 ? findByCoordinates(latitude, longitude).getAnnual()
+                        : findByCoordinates(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
             } catch (IOException | CsvException e) {
                 Log.e("TAG", "Erro no metodo calculateSolarExposureHours");
             }
@@ -153,7 +163,7 @@ public class CalculateActivity extends AppCompatActivity {
         return 0D;
     }
 
-    public GhiDTO findByLatLon(String latitude, String longitude) throws IOException, CsvException {
+    public GhiDTO findByCoordinates(String latitude, String longitude) throws IOException, CsvException {
         CordenadasDTO cordenadas = new CordenadasDTO(latitude, longitude);
 
         // Incidência para base de dados
@@ -261,8 +271,15 @@ public class CalculateActivity extends AppCompatActivity {
         });
     }
 
+    // Pega url com as coordenadas informadas
+    private String getExposureUrl(CordenadasDTO cordenadas) {
+        return "https://api.sunrise-sunset.org/json?lat=" + cordenadas.getLatitude() + "&lng="
+                + cordenadas.getLongitude() + "&formatted=0";
+    }
+
+    // Chama API externa para pegar horas de exposição solar
     private void doGetSolarExposureHours(CordenadasDTO cordenadas, Runnable callback) {
-        Request request = new Request.Builder().url(getUrl(cordenadas)).build();
+        Request request = new Request.Builder().url(getExposureUrl(cordenadas)).build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -288,10 +305,5 @@ public class CalculateActivity extends AppCompatActivity {
                 });
             }
         });
-    }
-
-    private String getUrl(CordenadasDTO cordenadas) {
-        return "https://api.sunrise-sunset.org/json?lat=" + cordenadas.getLatitude() + "&lng="
-                + cordenadas.getLongitude() + "&formatted=0";
     }
 }
