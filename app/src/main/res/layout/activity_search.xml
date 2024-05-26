@@ -11,8 +11,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
         android:text="@string/street_view"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
         android:id="@+id/textViewLat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
         android:text="@string/latitude"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,20 +45,19 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/textViewLat"
         app:layout_constraintTop_toBottomOf="@+id/textViewLat"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/textViewLon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="15dp"
         android:text="@string/longitude"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/textViewLat"
-        app:layout_constraintTop_toBottomOf="@+id/webView"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:per=""/>
+        app:layout_constraintStart_toEndOf="@+id/textViewLat"
+        app:layout_constraintTop_toBottomOf="@+id/webView" />
 
     <TextView
         android:id="@+id/textLon"
@@ -66,13 +65,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/textViewLon"
         app:layout_constraintTop_toBottomOf="@+id/textViewLon"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:id="@+id/textViewAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="60dp"
         android:text="@string/complete_address"
         android:textStyle="bold"
@@ -83,7 +82,7 @@
         android:id="@+id/textAddress"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textViewAddress"
         app:layout_constraintTop_toBottomOf="@+id/textViewAddress" />
@@ -92,7 +91,7 @@
         android:id="@+id/textViewError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="60dp"
         android:textColor="#D50000"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,7 +101,7 @@
         android:id="@+id/btnCalculate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="15dp"
         android:text="@string/calculate"
         android:textAlignment="center"
         android:textAllCaps="false"
@@ -117,7 +116,7 @@
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="15dp"
         android:text="@string/back"
         android:textAlignment="center"
         android:textAllCaps="false"
