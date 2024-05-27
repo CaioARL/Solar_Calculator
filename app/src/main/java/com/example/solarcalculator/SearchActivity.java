@@ -31,21 +31,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
-
     OkHttpClient client;
-
     TextView textAddress;
-
     TextView textLat;
-
     TextView textLon;
-
     WebView webView;
-
     Button btnBack;
-
     Button btnCalculate;
-
     TextView textError;
 
     @Override
@@ -59,32 +51,11 @@ public class SearchActivity extends AppCompatActivity {
             return insets;
         });
 
-        btnBack = findViewById(R.id.btnBack);
-        btnCalculate = findViewById(R.id.btnCalculate);
+        // Inicializa elementos da tela e atribui as funções para os botões
+        this.initElements();
+        this.setButtonFunctions();
 
-        btnCalculate.setOnClickListener(v -> {
-            String latitude = textLat.getText().toString();
-            String longitude = textLon.getText().toString();
-
-            if (!latitude.isEmpty() && !longitude.isEmpty() && !(latitude.equals("0.0000000") && longitude.equals("0.0000000"))) {
-            Intent intent = new Intent(SearchActivity.this, CalculateActivity.class);
-                intent.putExtra("LATITUDE", latitude);
-                intent.putExtra("LONGITUDE", longitude);
-                startActivity(intent);
-            }
-        });
-
-        btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
-            startActivity(intent);
-        });
-
-        client = new OkHttpClient();
-        textAddress = findViewById(R.id.textAddress);
-        textLat = findViewById(R.id.textLat);
-        textLon = findViewById(R.id.textLon);
-        webView = findViewById(R.id.webView);
-
+        // Pega Intent(valores da tela anterior (MainActivity)) e realiza busca do endeço e preenchimento dos campos
         Intent intent = getIntent();
         if(intent != null) {
             String address = intent.getStringExtra("ADDRESS");
@@ -92,13 +63,49 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void initElements() {
+        client = new OkHttpClient();
+
+        btnBack = findViewById(R.id.btnBack);
+        btnCalculate = findViewById(R.id.btnCalculate);
+        textAddress = findViewById(R.id.textAddress);
+        textLat = findViewById(R.id.textLat);
+        textLon = findViewById(R.id.textLon);
+        webView = findViewById(R.id.webView);
+    }
+
+    private void setButtonFunctions(){
+        // Botão calcular
+        btnCalculate.setOnClickListener(v -> {
+            String latitude = textLat.getText().toString();
+            String longitude = textLon.getText().toString();
+
+            // Se endereço não encontrado, não permitir calculo
+            if (!latitude.isEmpty() && !longitude.isEmpty() && !(latitude.equals("0.0000000") && longitude.equals("0.0000000"))) {
+                Intent intent = new Intent(SearchActivity.this, CalculateActivity.class);
+                intent.putExtra("LATITUDE", latitude);
+                intent.putExtra("LONGITUDE", longitude);
+                startActivity(intent);
+            }
+        });
+
+        // Botão voltar
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(SearchActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    // Gera url baseada no endereço informado
     private String getUrl(String address){
         return "https://nominatim.openstreetmap.org/search.php?q=" + address + "&format=jsonv2";
     }
 
     public void doGet(String address){
+        // Pega url dinâmica
         Request request = new Request.Builder().url(getUrl(address)).build();
         client.newCall(request).enqueue(new Callback() {
+            // Caso ocorra erro preenche texto genérico
             @SuppressLint("SetTextI18n")
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -122,9 +129,11 @@ public class SearchActivity extends AppCompatActivity {
                         Type listType = new TypeToken<List<PlaceDTO>>(){}.getType();
                         List<PlaceDTO> placeList = gson.fromJson(jsonResponse, listType);
 
+                        // Retorna lista de PlaceDTO
                         if (!placeList.isEmpty()) {
                             PlaceDTO dto = placeList.get(0);
 
+                            // Informações vazias caso não retorne nada
                             if(!dto.getDisplayName().toLowerCase().contains("brasil") && !dto.getDisplayName().toLowerCase().contains("brazil")){
                                 textAddress.setText("Endereço não encontrado no Brasil");
                                 textLat.setText("0.0000000");
@@ -132,12 +141,15 @@ public class SearchActivity extends AppCompatActivity {
                                 return;
                             }
 
+                            // Carrega mapa do endereço
                             loadOpenStreetMap(convertToBoundingBoxDTO(dto.getBoundingbox()));
+
+                            // Atribui os devidos valores aos campos
                             textAddress.setText(dto.getDisplayName());
                             textLat.setText(dto.getLat());
                             textLon.setText(dto.getLon());
-                            textError.setTextColor(getResources().getColor(R.color.amarelo));
-                            textError.setText("Caso necessário altere os valor de configurações no menu inicial");
+                            textError.setTextColor(getResources().getColor(R.color.laranja));
+                            textError.setText("Caso necessário altere os valor de configurações no menu superior da tela inicial");
                         }
                         else{
                             textAddress.setText("Endereço não encontrado");
@@ -153,6 +165,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    // Acessa url com coordenas e mostra na view o mapa da localidade
     @SuppressLint({"SetJavaScriptEnabled", "SetTextI18n"})
     private void loadOpenStreetMap(BoundingBoxDTO bound) {
         try {
@@ -170,7 +183,6 @@ public class SearchActivity extends AppCompatActivity {
         if (boundingbox == null || boundingbox.size() != 4) {
             return null;
         }
-
         BoundingBoxDTO boundingBoxDTO = new BoundingBoxDTO();
         boundingBoxDTO.setMinLatitude(boundingbox.get(0));
         boundingBoxDTO.setMaxLatitude(boundingbox.get(1));
