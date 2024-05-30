@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissão concedida, pode acessar a localização
                 locationSwitch.setVisibility(Switch.VISIBLE);
-                getLastLocation();
             } else {
                 // Permissão negada, lidar com o caso de permissão negada
                 locationSwitch.setVisibility(Switch.GONE);
