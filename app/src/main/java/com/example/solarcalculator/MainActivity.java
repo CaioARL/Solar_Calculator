@@ -15,12 +15,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editAddress;
     Button btnSearch;
     Toolbar toolbar;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
-    Switch locationSwitch;
+    SwitchCompat locationSwitch;
     FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -105,10 +104,10 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissão concedida, pode acessar a localização
-                locationSwitch.setVisibility(Switch.VISIBLE);
+                locationSwitch.setVisibility(SwitchCompat.VISIBLE);
             } else {
                 // Permissão negada, lidar com o caso de permissão negada
-                locationSwitch.setVisibility(Switch.GONE);
+                locationSwitch.setVisibility(SwitchCompat.GONE);
             }
         }
     }
@@ -121,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Switch não visível enquanto permissão de localização != true
         locationSwitch = findViewById(R.id.locationSwitch);
-        locationSwitch.setVisibility(Switch.GONE);
+        locationSwitch.setVisibility(SwitchCompat.GONE);
 
         setSupportActionBar(toolbar);
     }
@@ -184,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             // Permissão não foi concedida, solicita a permissão
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
-            locationSwitch.setVisibility(Switch.VISIBLE);
+            locationSwitch.setVisibility(SwitchCompat.VISIBLE);
         }
     }
 
