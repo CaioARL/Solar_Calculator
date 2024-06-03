@@ -285,7 +285,7 @@ public class CalculateActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("TAG", "Erro no metodo doGetSolarExposureHours" + e);
+                runOnUiThread(() -> Log.e("TAG", "Erro no metodo doGetSolarExposureHours" + e));
             }
 
             @Override

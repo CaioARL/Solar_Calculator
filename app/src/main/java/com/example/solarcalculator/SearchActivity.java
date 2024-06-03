@@ -7,7 +7,6 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -110,9 +109,11 @@ public class SearchActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                textError = findViewById(R.id.textViewError);
-                textError.setText("Erro ao tentar buscar informações do endereço, por favor tente mais tarde!");
-                Log.e("TAG", "Erro no metodo doGet" + e);
+                runOnUiThread(() -> {
+                    textError = findViewById(R.id.textViewError);
+                    textError.setText("Erro ao tentar buscar informações do endereço, por favor tente mais tarde!");
+                    Log.e("TAG", "Erro no metodo doGet" + e);
+                });
             }
 
             @SuppressLint("SetTextI18n")
