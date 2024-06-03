@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -126,7 +127,8 @@ public class CalculateActivity extends AppCompatActivity {
                 irradiacaoSolar = periodo == 2 ? findByCoordinates(latitude, longitude).getAnnual()
                         : findByCoordinates(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
             } catch (IOException | CsvException e) {
-                Log.e("TAG", "Erro no metodo calculateSolarExposureHours");
+                Log.e("TAG", "Erro no metodo calculateSolarExposureHours" + e);
+                Toast.makeText(this, "Error on calculateSolarExposureHours", Toast.LENGTH_LONG).show();
             }
 
             // Cálculo da energia gerada pelo painel solar em kWh
@@ -283,7 +285,7 @@ public class CalculateActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e("TAG", "Erro no metodo doGetSolarExposureHours");
+                Log.e("TAG", "Erro no metodo doGetSolarExposureHours" + e);
             }
 
             @Override

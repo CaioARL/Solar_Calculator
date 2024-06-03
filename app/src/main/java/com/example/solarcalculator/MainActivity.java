@@ -10,6 +10,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -154,11 +155,11 @@ public class MainActivity extends AppCompatActivity {
                 Address address = addresses.get(0);
                 String streetAddress = address.getAddressLine(0);
                 editAddress.setText(streetAddress);
-                Toast.makeText(MainActivity.this, streetAddress, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(MainActivity.this, "Address not found", Toast.LENGTH_LONG).show();
             }
         } catch (IOException e) {
+            Log.e("TAG", "Erro no metodo getAddressFromLocation" + e);
             Toast.makeText(this, "Unable to get street address", Toast.LENGTH_LONG).show();
         }
     }
