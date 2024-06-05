@@ -16,8 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.solarcalculator.Dto.BoundingBoxDTO;
-import com.example.solarcalculator.Dto.PlaceDTO;
+import com.example.solarcalculator.dto.BoundingBoxDTO;
+import com.example.solarcalculator.dto.PlaceDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

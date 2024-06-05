@@ -17,9 +17,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.solarcalculator.Dto.CordenadasDTO;
-import com.example.solarcalculator.Dto.GiDTO;
-import com.example.solarcalculator.Dto.SunriseSunsetDTO;
+import com.example.solarcalculator.dto.CordenadasDTO;
+import com.example.solarcalculator.dto.GiDTO;
+import com.example.solarcalculator.dto.SunriseSunsetDTO;
 import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;

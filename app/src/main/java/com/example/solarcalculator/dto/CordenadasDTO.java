@@ -1,25 +1,13 @@
-package com.example.solarcalculator.Dto;
+package com.example.solarcalculator.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class CordenadasDTO {
     private String latitude;
     private String longitude;
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
 
     public CordenadasDTO getCordenadasToSearch(){
         this.setLatitude(this.latitude.substring(0,6));

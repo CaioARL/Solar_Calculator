@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Solar_Calculator 👋</h1>
+<h1>Welcome to Solar_Calculator 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-feature--localizacao--atual--SNAPSHOT-blue.svg?cacheSeconds=2592000" />
   <a href="https://opensource.org/license/MIT" target="_blank">
