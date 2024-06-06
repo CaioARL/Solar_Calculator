@@ -154,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
             if (addresses != null && !addresses.isEmpty()) {
                 Address address = addresses.get(0);
                 String streetAddress = address.getAddressLine(0);
-                editAddress.setText(streetAddress);
+                String coordinatesAddress = address.getLatitude() + " " + address.getLongitude();
+                editAddress.setText(coordinatesAddress);
                 Toast.makeText(MainActivity.this, streetAddress, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(MainActivity.this, "Address not found", Toast.LENGTH_LONG).show();
