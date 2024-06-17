@@ -7,6 +7,7 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -15,14 +16,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.solarcalculator.Dto.BoundingBoxDTO;
-import com.example.solarcalculator.Dto.PlaceDTO;
+import com.example.solarcalculator.dto.BoundingBoxDTO;
+import com.example.solarcalculator.dto.PlaceDTO;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -64,7 +66,12 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void initElements() {
-        client = new OkHttpClient();
+        // Configurango OkHttpClient
+        client = new OkHttpClient.Builder()
+                .connectTimeout(60, TimeUnit.SECONDS) // Tempo de conexão
+                .writeTimeout(30, TimeUnit.SECONDS)   // Tempo de escrita
+                .readTimeout(30, TimeUnit.SECONDS)    // Tempo de leitura
+                .build();
 
         btnBack = findViewById(R.id.btnBack);
         btnCalculate = findViewById(R.id.btnCalculate);
@@ -109,9 +116,12 @@ public class SearchActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                textError = findViewById(R.id.textViewError);
-                textError.setText("Erro ao tentar buscar informações do endereço, por favor tente mais tarde!");
-                Log.e("TAG", "Erro no metodo doGet");
+                runOnUiThread(() -> {
+                    textError = findViewById(R.id.textViewError);
+                    textError.setText("Erro ao tentar buscar informações do endereço, por favor tente mais tarde!");
+                    Log.e("TAG", "Erro no metodo doGet" + e);
+                    Toast.makeText(SearchActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
 
             @SuppressLint("SetTextI18n")
