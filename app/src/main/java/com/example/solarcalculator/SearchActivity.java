@@ -158,7 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                             textAddress.setText(dto.getDisplayName());
                             textLat.setText(dto.getLat());
                             textLon.setText(dto.getLon());
-                            textError.setTextColor(getResources().getColor(R.color.laranja));
+                            textError.setTextColor(getResources().getColor(R.color.red));
                             textError.setText("Caso necessário altere os valor de configurações no menu superior da tela inicial");
                         }
                         else{

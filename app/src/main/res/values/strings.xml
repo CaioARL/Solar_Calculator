@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Solar Calculator</string>
     <string name="search">Search</string>
-    <string name="enter_address">Enter address</string>
+    <string name="enter_address">Digite o endereço</string>
     <string name="solar_calculator">Solar Calculator</string>
     <string name="back">Back</string>
     <string name="calculate">Calculate</string>
@@ -30,7 +30,8 @@
     <string name="rea_total_do_painel_solar_em_m">Área total do painel solar em m²</string>
     <string name="_1_5m">1,5m²</string>
     <string name="base_de_dados_para_c_lculo">Base de dados para cálculo</string>
-    <string name="local_atual">Usar localização atual</string>
+    <string name="current_location">Usar localização atual</string>
+    <string name="sun_image">solarCalculatorImage</string>
     <string-array name="periodos">
         <item>Diário</item>
         <item>Mensal</item>
