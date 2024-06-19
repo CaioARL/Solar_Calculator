@@ -3,9 +3,11 @@ package com.example.solarcalculator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,9 +44,13 @@ import okhttp3.Response;
 public class CalculateActivity extends AppCompatActivity {
     OkHttpClient client;
     SharedPreferences preferences;
-    TextView energy;
-    TextView money;
-    Button btnNewAddress;
+    TextView economyPeriodText;
+    TextView economyROIText;
+    TextView environmentCO2Text;
+    TextView weatherForecastText;
+    TextView weatherImpactText;
+    Button btnVideoTutorial;
+    Button btnHome;
     SunriseSunsetDTO sunInfo;
 
     @Override
@@ -71,15 +77,25 @@ public class CalculateActivity extends AppCompatActivity {
         // informações salvas
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
-        btnNewAddress = findViewById(R.id.btnBack);
-        energy = findViewById(R.id.textEnergy);
-        money = findViewById(R.id.textMoney);
+        // Cliente HTTP
         client = new OkHttpClient();
+
+        // Buttons
+        btnHome = findViewById(R.id.btnHome);
+        btnVideoTutorial = findViewById(R.id.btnVideoTutorial);
+
+        //  Textviews
+        economyPeriodText = findViewById(R.id.economyPeriod);
+        economyROIText = findViewById(R.id.economyROI);
+        environmentCO2Text = findViewById(R.id.environmentCO2);
+        weatherForecastText = findViewById(R.id.weatherForecast);
+        weatherImpactText = findViewById(R.id.weatherImpact);
+
     }
 
     private void setButtonAndSelectFunctions(){
         // Quando botao new adress pressionado
-        btnNewAddress.setOnClickListener(v -> {
+        btnHome.setOnClickListener(v -> {
             Intent intent = new Intent(CalculateActivity.this, MainActivity.class);
             startActivity(intent);
         });
@@ -138,11 +154,12 @@ public class CalculateActivity extends AppCompatActivity {
             energiaGerada = adjustEnergyGeneratedByPeriod(energiaGerada, periodo);
 
             // Setando valores finais nos campos de texto
-            energy.setText(String.format("%s kWh", String.format(Double.toString(energiaGerada))));
-            money.setText(String.format("R$%s", String.format(Double
-                    .toString((double) Math.round((energiaGerada * preferences.getFloat("preco", 0.5F)) * 100)
-                            / 100))));
+            fillReport(energiaGerada, preferences.getFloat("preco_energia", 0.8F), areaPainel, eficienciaPainel, periodo);
         });
+    }
+
+    private void fillReport(double energiaGerada, double precoEnergia, double areaPainel, double eficienciaPainel, int periodo) {
+
     }
 
     private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel,
@@ -307,5 +324,22 @@ public class CalculateActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+    // Abrir video explicativo
+    public void openYouTubeVideo(View view) {
+        // Substitua pelo ID do vídeo do YouTube desejado
+        String videoId = "c8e2RSPIzQg";
+
+        // Tenta abrir o vídeo no aplicativo do YouTube
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+
+        // Verifica se há um aplicativo que pode lidar com a Intent
+        if (appIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(appIntent);
+        } else {
+            // Se não houver, abre no navegador web
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+            startActivity(webIntent);
+        }
     }
 }

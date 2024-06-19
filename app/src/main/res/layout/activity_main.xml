@@ -10,29 +10,17 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        style="@style/CustomToolbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
-    <ImageView
-        android:id="@+id/solarCalculatorImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="65dp"
-        android:contentDescription="@string/sun_image"
-        android:src="@drawable/icon_sun"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
     
     <View
         android:id="@+id/view"
         style="@style/ContainerComponents"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/solarCalculatorImage"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/locationSwitch"
@@ -58,6 +46,17 @@
         android:text="@string/search"
         app:layout_constraintStart_toStartOf="@+id/view"
         app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/view" />
+        app:layout_constraintTop_toBottomOf="@+id/view"/>
+
+    <ImageView
+        android:id="@+id/solarCalculatorImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="65dp"
+        android:contentDescription="@string/sun_image"
+        android:src="@drawable/icon_sun"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSearch" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

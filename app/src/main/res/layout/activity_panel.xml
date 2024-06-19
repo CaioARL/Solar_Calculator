@@ -9,145 +9,90 @@
     tools:context=".PanelActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:id="@+id/textViewTitle"
+        style="@style/CustomTextViewTittle"
         android:text="@string/panel_info"
-        android:textAlignment="center"
-        android:textSize="35sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginBottom="50dp"
+        android:id="@+id/textViewBase"
+        style="@style/CustomTextView"
         android:text="@string/base_de_dados_para_c_lculo"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintBottom_toBottomOf="@+id/spinnerIncidencia"
-        app:layout_constraintStart_toStartOf="@+id/spinnerIncidencia"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Spinner
-        android:id="@+id/spinnerIncidencia"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="70dp"
-        android:minHeight="50dp"
-        android:spinnerMode="dropdown"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTitle"/>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spinnerIncidencia"
+        style="@style/CustomSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBase"/>
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="40dp"
+        android:id="@+id/textViewCelulas"
+        style="@style/CustomTextView"
         android:text="@string/numero_de_c_lulas_para_c_lculo"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textStyle="bold|italic"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinnerIncidencia" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinnerIncidencia"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editCelula"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/CustomTextInputNumber"
         android:hint="@string/_1_un"
-        android:inputType="number|numberDecimal"
-        android:textColorHint="#78909C"
-        android:textSize="40sp"
-        app:layout_constraintStart_toStartOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCelulas"/>
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:id="@+id/textViewArea"
+        style="@style/CustomTextView"
         android:text="@string/rea_total_do_painel_solar_em_m"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintStart_toStartOf="@+id/editCelula"
-        app:layout_constraintTop_toBottomOf="@+id/editCelula" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCelula"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editArea"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        style="@style/CustomTextInputNumber"
         android:hint="@string/_1_5m"
-        android:inputType="number|numberDecimal"
-        android:textColorHint="#78909C"
-        android:textSize="40sp"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewArea" />
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:id="@+id/textViewTaxa"
+        style="@style/CustomTextView"
         android:text="@string/taxa_de_efici_ncia_da_c_lula"
-        android:textAlignment="center"
-        android:textSize="25sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintStart_toStartOf="@+id/editArea"
-        app:layout_constraintTop_toBottomOf="@+id/editArea" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editArea"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/editTaxa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        style="@style/CustomTextInputNumber"
         android:hint="@string/_0_2"
-        android:inputType="number|numberDecimal"
-        android:textColorHint="#78909C"
-        android:textSize="40sp"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
-
-    <Button
-        android:id="@+id/btnSavePanel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="@string/save"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:icon="@android:drawable/ic_menu_save"
-        app:layout_constraintBottom_toTopOf="@+id/btnBack"
-        app:layout_constraintEnd_toEndOf="@+id/btnBack" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
-        android:text="@string/back"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:icon="@android:drawable/ic_menu_revert"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTaxa" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewTaxa" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSavePanel"
+        style="@style/CustomButtonStyle"
+        android:text="@string/save"
+        app:icon="@android:drawable/ic_menu_save"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTaxa"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnBack"
+        style="@style/CustomButtonStyle"
+        android:text="@string/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSavePanel"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

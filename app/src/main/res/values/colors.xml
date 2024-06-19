@@ -2,8 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="gray">#FF9E9E9E</color>
+    <color name="deep_gray">#4C4C4E</color>
     <color name="red">#FF0000</color>
+    <color name="brown">#5D4037</color>
     <color name="blue_sky">#5dadd2</color>
-    <color name="yellow_sky">#e9bf95</color>
-    <color name="orange_sky">#f2aa24</color>
+    <color name="yellow_sky">#c1a558</color>
+    <color name="deep_blue_sky">#001658</color>
+    <color name="cloud_sky">#C8D3D6</color>
 </resources>

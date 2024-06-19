@@ -9,99 +9,97 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:layout_marginBottom="89dp"
-        android:text="@string/total_energy"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/textEnergy"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:id="@+id/scrollView"
+        style="@style/CustomScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textEnergy"
-        android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginEnd="55dp"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="127dp"
-        android:contentDescription="@string/total_energy"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:srcCompat="@drawable/icon_energy" />
+            <!-- Título do Relatório -->
+            <TextView
+                android:id="@+id/reportTitle"
+                style="@style/CustomTextView"
+                android:text="Relatório de Potencial de Energia Solar" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="97dp"
-        android:lineSpacingExtra="20sp"
-        android:text="@string/money_saved"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/textMoney"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+            <!-- Introdução -->
+            <TextView
+                android:id="@+id/introductionTitle"
+                style="@style/CustomTextViewCalculateSubTittle"
+                android:text="Introdução" />
+            <TextView
+                android:id="@+id/introductionText"
+                style="@style/CustomGenericTextView"
+                android:text="Objetivo do Relatório: Apresentar uma análise detalhada do potencial de energia solar na localização especificada." />
 
-    <TextView
-        android:id="@+id/textMoney"
-        android:layout_width="0dp"
-        android:layout_height="220dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="302dp"
-        android:layout_marginEnd="55dp"
-        android:layout_marginBottom="299dp"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="34sp"
+            <!-- Economia e Retorno do Investimento -->
+            <TextView
+                android:id="@+id/economyTitle"
+                style="@style/CustomTextViewCalculateSubTittle"
+                android:text="Economia e Retorno do Investimento"
+                />
+            <TextView
+                android:id="@+id/economyPeriod"
+                style="@style/CustomGenericTextView"
+                android:text="Economia Mensal Estimada na Conta de Luz: R$ 83,25" />
+            <TextView
+                android:id="@+id/economyROI"
+                style="@style/CustomGenericTextView"
+                android:text="Cálculo do ROI: \nInvestimento Inicial: R$ 15.000,00 \nEconomia Anual: R$ 1.012,88 \nTempo de Retorno do Investimento: 14,8 anos" />
+
+            <!-- Impacto Ambiental -->
+            <TextView
+                android:id="@+id/environmentTitle"
+                style="@style/CustomTextViewCalculateSubTittle"
+                android:text="Impacto Ambiental" />
+            <TextView
+                android:id="@+id/environmentCO2"
+                style="@style/CustomGenericTextView"
+                android:text="Redução Estimada de Emissão de CO2 Anual: 675,25 kg" />
+
+            <!-- Previsão de Clima e Impacto na Produção -->
+            <TextView
+                android:id="@+id/weatherTitle"
+                style="@style/CustomTextViewCalculateSubTittle"
+                android:text="Previsão de Clima e Impacto na Produção" />
+            <TextView
+                android:id="@+id/weatherForecast"
+                style="@style/CustomGenericTextView"
+                android:text="Previsão do Tempo para os Próximos 7 Dias: \nSegunda-feira: Ensolarado, 28°C \nTerça-feira: Parcialmente nublado, 26°C \nQuarta-feira: Chuva, 22°C \nQuinta-feira: Ensolarado, 27°C \nSexta-feira: Nublado, 25°C \nSábado: Ensolarado, 29°C \nDomingo: Parcialmente nublado, 27°C" />
+            <TextView
+                android:id="@+id/weatherImpact"
+                style="@style/CustomGenericTextView"
+                android:text="Impacto Estimado na Produção de Energia Solar: \nDias ensolarados: Produção máxima de 3,7 kWh \nDias parcialmente nublados: Produção estimada de 2,5 kWh \nDias nublados/chuvosos: Produção estimada de 1,5 kWh"
+                android:paddingBottom="8dp"/>
+
+            <!-- Módulo Educacional -->
+            <TextView
+                android:id="@+id/educationTitle"
+                style="@style/CustomTextViewCalculateSubTittle"
+                android:text="Módulo Educacional" />
+            <TextView
+                android:id="@+id/educationText"
+                style="@style/CustomGenericTextView"
+                android:text="Funcionamento da Energia Solar: \nComponentes de um Sistema Solar: \nPainéis solares, Inversor, Baterias (opcional), Medidor bidirecional \nPrincípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica." />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnVideoTutorial"
+                style="@style/CustomButtonStyle"
+                android:text="Assista a Vídeos Explicativos"
+                android:onClick="openYouTubeVideo"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnHome"
+        style="@style/CustomCalculateButtonHome"
+        android:text="@string/home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textEnergy" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="80dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="215dp"
-        android:contentDescription="@string/money_saved"
-        app:layout_constraintBottom_toTopOf="@+id/btnBack"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
-        app:srcCompat="@drawable/icon_money" />
-
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:text="@string/new_address"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:icon="@android:drawable/ic_dialog_map"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
