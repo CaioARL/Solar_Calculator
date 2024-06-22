@@ -22,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.solarcalculator.dto.CordenadasDTO;
 import com.example.solarcalculator.dto.GiDTO;
 import com.example.solarcalculator.dto.SunriseSunsetDTO;
+import com.example.solarcalculator.utils.CalculateActivityTextUtils;
 import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -52,6 +53,9 @@ public class CalculateActivity extends AppCompatActivity {
     Button btnVideoTutorial;
     Button btnHome;
     SunriseSunsetDTO sunInfo;
+
+    private static final String videoId = "c8e2RSPIzQg";
+    private static final String videoTime = "5s";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,13 +157,28 @@ public class CalculateActivity extends AppCompatActivity {
 
             energiaGerada = adjustEnergyGeneratedByPeriod(energiaGerada, periodo);
 
+            //             energy.setText(String.format("%s kWh", String.format(Double.toString(energiaGerada))));
+            //            money.setText(String.format("R$%s", String.format(Double
+            //                    .toString((double) Math.round((energiaGerada * preferences.getFloat("preco", 0.5F)) * 100)
+            //                            / 100))));
+
             // Setando valores finais nos campos de texto
-            fillReport(energiaGerada, preferences.getFloat("preco_energia", 0.8F), areaPainel, eficienciaPainel, periodo);
+            fillReport(energiaGerada, preferences.getFloat("preco", 0.5F), areaPainel, eficienciaPainel, irradiacaoSolar,
+                    preferences.getInt("qtde_celula", 1), periodo);
         });
     }
 
-    private void fillReport(double energiaGerada, double precoEnergia, double areaPainel, double eficienciaPainel, int periodo) {
+    private void fillReport(double energiaGerada, float precoEnergia, double areaPainel, double eficienciaPainel, double irradiacao,
+                            Integer numberOfPanels, int periodo) {
+        CalculateActivityTextUtils calculateActivityTextUtils = new CalculateActivityTextUtils(energiaGerada, precoEnergia, areaPainel,
+                eficienciaPainel, irradiacao, numberOfPanels, periodo);
 
+        // Setando valores nos campos de texto
+        economyPeriodText.setText(calculateActivityTextUtils.getEconomy());
+        economyROIText.setText(calculateActivityTextUtils.getROI());
+        environmentCO2Text.setText(calculateActivityTextUtils.getCO2Reduction());
+        //weatherForecastText.setText(calculateActivityTextUtils.getWeatherEnergyProduction());
+        weatherImpactText.setText(calculateActivityTextUtils.getWeatherImpactEnergyProduction());
     }
 
     private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel,
@@ -327,18 +346,16 @@ public class CalculateActivity extends AppCompatActivity {
     }
     // Abrir video explicativo
     public void openYouTubeVideo(View view) {
-        // Substitua pelo ID do vídeo do YouTube desejado
-        String videoId = "c8e2RSPIzQg";
 
         // Tenta abrir o vídeo no aplicativo do YouTube
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId));
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId + "?t=" + videoTime));
 
         // Verifica se há um aplicativo que pode lidar com a Intent
         if (appIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(appIntent);
         } else {
             // Se não houver, abre no navegador web
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId + "&t=" + videoTime));
             startActivity(webIntent);
         }
     }

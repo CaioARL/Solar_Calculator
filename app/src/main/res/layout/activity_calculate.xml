@@ -19,12 +19,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="30dp">
 
             <!-- Título do Relatório -->
             <TextView
                 android:id="@+id/reportTitle"
-                style="@style/CustomTextView"
+                style="@style/CustomTextViewCalculateTittle"
                 android:text="Relatório de Potencial de Energia Solar" />
 
             <!-- Introdução -->
@@ -35,7 +35,7 @@
             <TextView
                 android:id="@+id/introductionText"
                 style="@style/CustomGenericTextView"
-                android:text="Objetivo do Relatório: Apresentar uma análise detalhada do potencial de energia solar na localização especificada." />
+                android:text="Objetivo desse relatório é apresentar uma análise superficial a respeito do potencial de energia solar na localização especificada." />
 
             <!-- Economia e Retorno do Investimento -->
             <TextView
@@ -45,12 +45,10 @@
                 />
             <TextView
                 android:id="@+id/economyPeriod"
-                style="@style/CustomGenericTextView"
-                android:text="Economia Mensal Estimada na Conta de Luz: R$ 83,25" />
+                style="@style/CustomGenericTextView" />
             <TextView
                 android:id="@+id/economyROI"
-                style="@style/CustomGenericTextView"
-                android:text="Cálculo do ROI: \nInvestimento Inicial: R$ 15.000,00 \nEconomia Anual: R$ 1.012,88 \nTempo de Retorno do Investimento: 14,8 anos" />
+                style="@style/CustomGenericTextView" />
 
             <!-- Impacto Ambiental -->
             <TextView
@@ -59,8 +57,7 @@
                 android:text="Impacto Ambiental" />
             <TextView
                 android:id="@+id/environmentCO2"
-                style="@style/CustomGenericTextView"
-                android:text="Redução Estimada de Emissão de CO2 Anual: 675,25 kg" />
+                style="@style/CustomGenericTextView" />
 
             <!-- Previsão de Clima e Impacto na Produção -->
             <TextView
@@ -74,7 +71,6 @@
             <TextView
                 android:id="@+id/weatherImpact"
                 style="@style/CustomGenericTextView"
-                android:text="Impacto Estimado na Produção de Energia Solar: \nDias ensolarados: Produção máxima de 3,7 kWh \nDias parcialmente nublados: Produção estimada de 2,5 kWh \nDias nublados/chuvosos: Produção estimada de 1,5 kWh"
                 android:paddingBottom="8dp"/>
 
             <!-- Módulo Educacional -->
@@ -85,10 +81,10 @@
             <TextView
                 android:id="@+id/educationText"
                 style="@style/CustomGenericTextView"
-                android:text="Funcionamento da Energia Solar: \nComponentes de um Sistema Solar: \nPainéis solares, Inversor, Baterias (opcional), Medidor bidirecional \nPrincípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica." />
+                android:text="Princípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica." />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnVideoTutorial"
-                style="@style/CustomButtonStyle"
+                style="@style/CustomCalculateButtonStyle"
                 android:text="Assista a Vídeos Explicativos"
                 android:onClick="openYouTubeVideo"/>
         </LinearLayout>
