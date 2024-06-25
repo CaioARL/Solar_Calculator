@@ -2,7 +2,6 @@
     <string name="app_name">Solar Calculator</string>
     <string name="search">Search</string>
     <string name="enter_address">Digite o endereço</string>
-    <string name="solar_calculator">Solar Calculator</string>
     <string name="back">Back</string>
     <string name="calculate">Calculate</string>
     <string name="complete_address">Complete Address</string>
@@ -32,6 +31,15 @@
     <string name="base_de_dados_para_c_lculo">Base de dados para cálculo</string>
     <string name="current_location">Usar localização atual</string>
     <string name="sun_image">solarCalculatorImage</string>
+    <string name="title_relatorio">Relatório de Potencial de Energia Solar</string>
+    <string name="introducao_title">Introdução</string>
+    <string name="introducao_relatorio">Objetivo desse relatório é apresentar uma análise superficial a respeito do potencial de energia solar na localização especificada.</string>
+    <string name="roi_title">Economia e Retorno do Investimento</string>
+    <string name="ambiental_title">Impacto Ambiental</string>
+    <string name="previsao_title">Previsão de Clima e Impacto na Produção</string>
+    <string name="educacional_title">Módulo Educacional</string>
+    <string name="educacional">Princípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica.</string>
+    <string name="btn_videos_text">Assista a Vídeos Explicativos</string>
     <string-array name="periodos">
         <item>Diário</item>
         <item>Mensal</item>

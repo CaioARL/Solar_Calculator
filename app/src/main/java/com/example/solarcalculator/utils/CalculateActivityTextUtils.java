@@ -1,6 +1,6 @@
 package com.example.solarcalculator.utils;
 
-import androidx.annotation.NonNull;
+import java.util.Locale;
 
 public class CalculateActivityTextUtils {
 
@@ -46,29 +46,37 @@ public class CalculateActivityTextUtils {
     }
 
     public String getEconomy() {
-        return "Economia " + getNamePeriod() + " estimada na conta de luz: R$" + energy*energyPrice;
+        return String.format(Locale.US,"Economia %s estimada na conta de luz: R$%.2f",
+                getNamePeriod(), energy*energyPrice);
     }
 
     public String getROI() {
-        return "Retorno sobre o investimento: " +
-                "\nInvestimento inicial: R$" + initialInvestment +
-                "\nEconomia anual: R$" + economyYearly +
-                "\nPayback: " + payback + " anos";
+        return String.format(Locale.US,"Retorno sobre o investimento: " +
+                "\nInvestimento inicial: R$%.2f" +
+                "\nEconomia anual: R$%.2f" +
+                "\nPayback: %.2f anos",
+                initialInvestment, economyYearly, payback);
     }
 
     public String getCO2Reduction() {
-        return "Redução de CO2: " +
-                "\nCarvão: " + co2ReductionCoal + " kg" +
-                "\nGás natural: " + co2ReductionNaturalGas + " kg" +
-                "\nÓleo: " + co2ReductionOil + " kg" +
-                "\nMix de eletricidade: " + co2ReductionElectricityMix + " kg";
+        return String.format(Locale.US,"Redução de CO2: " +
+                "\nCarvão: %.2f kg" +
+                "\nGás natural: %.2f kg" +
+                "\nÓleo: %.2f kg" +
+                "\nMix de eletricidade: %.2f kg",
+                co2ReductionCoal, co2ReductionNaturalGas, co2ReductionOil, co2ReductionElectricityMix);
     }
 
     public String getWeatherImpactEnergyProduction() {
-        return "Produção de energia em diferentes condições climáticas: " +
-                "\nEnsolarado: " + energy + " kWh" +
-                "\nParcialmente nublado: " + energyOnCloudyDays + " kWh" +
-                "\nChuvoso: " + energyOnRainyDays + " kWh";
+        return String.format(Locale.US,"Produção de energia em diferentes condições climáticas: " +
+                "\nEnsolarado: %.2f kWh" +
+                "\nParcialmente nublado: %.2f kWh" +
+                "\nChuvoso: %.2f kWh",
+                energy, energyOnCloudyDays, energyOnRainyDays);
+    }
+
+    public String getWeatherForecast() {
+        return "Previsão do tempo: ";
     }
 
     public double getInitialInvestment() {

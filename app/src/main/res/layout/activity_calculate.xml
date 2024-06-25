@@ -25,23 +25,23 @@
             <TextView
                 android:id="@+id/reportTitle"
                 style="@style/CustomTextViewCalculateTittle"
-                android:text="Relatório de Potencial de Energia Solar" />
+                android:text="@string/title_relatorio" />
 
             <!-- Introdução -->
             <TextView
                 android:id="@+id/introductionTitle"
                 style="@style/CustomTextViewCalculateSubTittle"
-                android:text="Introdução" />
+                android:text="@string/introducao_title" />
             <TextView
                 android:id="@+id/introductionText"
                 style="@style/CustomGenericTextView"
-                android:text="Objetivo desse relatório é apresentar uma análise superficial a respeito do potencial de energia solar na localização especificada." />
+                android:text="@string/introducao_relatorio" />
 
             <!-- Economia e Retorno do Investimento -->
             <TextView
                 android:id="@+id/economyTitle"
                 style="@style/CustomTextViewCalculateSubTittle"
-                android:text="Economia e Retorno do Investimento"
+                android:text="@string/roi_title"
                 />
             <TextView
                 android:id="@+id/economyPeriod"
@@ -54,7 +54,7 @@
             <TextView
                 android:id="@+id/environmentTitle"
                 style="@style/CustomTextViewCalculateSubTittle"
-                android:text="Impacto Ambiental" />
+                android:text="@string/ambiental_title" />
             <TextView
                 android:id="@+id/environmentCO2"
                 style="@style/CustomGenericTextView" />
@@ -63,11 +63,10 @@
             <TextView
                 android:id="@+id/weatherTitle"
                 style="@style/CustomTextViewCalculateSubTittle"
-                android:text="Previsão de Clima e Impacto na Produção" />
+                android:text="@string/previsao_title" />
             <TextView
                 android:id="@+id/weatherForecast"
-                style="@style/CustomGenericTextView"
-                android:text="Previsão do Tempo para os Próximos 7 Dias: \nSegunda-feira: Ensolarado, 28°C \nTerça-feira: Parcialmente nublado, 26°C \nQuarta-feira: Chuva, 22°C \nQuinta-feira: Ensolarado, 27°C \nSexta-feira: Nublado, 25°C \nSábado: Ensolarado, 29°C \nDomingo: Parcialmente nublado, 27°C" />
+                style="@style/CustomGenericTextView" />
             <TextView
                 android:id="@+id/weatherImpact"
                 style="@style/CustomGenericTextView"
@@ -77,16 +76,15 @@
             <TextView
                 android:id="@+id/educationTitle"
                 style="@style/CustomTextViewCalculateSubTittle"
-                android:text="Módulo Educacional" />
+                android:text="@string/educacional_title" />
             <TextView
                 android:id="@+id/educationText"
                 style="@style/CustomGenericTextView"
-                android:text="Princípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica." />
+                android:text="@string/educacional" />
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnVideoTutorial"
                 style="@style/CustomCalculateButtonStyle"
-                android:text="Assista a Vídeos Explicativos"
-                android:onClick="openYouTubeVideo"/>
+                android:text="@string/btn_videos_text" />
         </LinearLayout>
     </ScrollView>
 

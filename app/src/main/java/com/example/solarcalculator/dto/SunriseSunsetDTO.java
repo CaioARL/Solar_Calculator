@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SunriseSunsetDTO {
-    private Results results;
-    private String status;
-    private String tzid;
-    private double exposureHours;
+    Results results;
+    String status;
+    String tzid;
+    double exposureHours;
 
     @Getter
     @Setter

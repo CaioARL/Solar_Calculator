@@ -9,13 +9,11 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -131,6 +129,11 @@ public class MainActivity extends AppCompatActivity {
     private void setButtonFunctions() {
         // Botão search
         btnSearch.setOnClickListener(v -> {
+            String address = editAddress.getText().toString();
+            if (address.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Por favor insira um endereço", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             intent.putExtra("ADDRESS", editAddress.getText().toString());
             startActivity(intent);
@@ -158,13 +161,13 @@ public class MainActivity extends AppCompatActivity {
                 String streetAddress = address.getAddressLine(0);
                 String coordinatesAddress = address.getLatitude() + " " + address.getLongitude();
                 editAddress.setText(coordinatesAddress);
-                Toast.makeText(MainActivity.this, streetAddress, Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, streetAddress, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(MainActivity.this, "Address not found", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Address not found", Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             Log.e("TAG", "Erro no metodo getAddressFromLocation" + e);
-            Toast.makeText(this, "Unable to get street address", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Unable to get street address", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,9 +202,8 @@ public class MainActivity extends AppCompatActivity {
                 Location location = task.getResult();
                 getAddressFromLocation(location);
             } else {
-                Toast.makeText(MainActivity.this, "Failed to get location", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Failed to get location", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
 }

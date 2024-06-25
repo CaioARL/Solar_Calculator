@@ -103,6 +103,9 @@ public class CalculateActivity extends AppCompatActivity {
             Intent intent = new Intent(CalculateActivity.this, MainActivity.class);
             startActivity(intent);
         });
+
+        // Quando botao video tutorial pressionado
+        btnVideoTutorial.setOnClickListener(this::openYouTubeVideo);
     }
 
     // Função de transição para o doCalc principal, verifica coordenadas informadas anteriormente(SearchActivity)
@@ -148,7 +151,7 @@ public class CalculateActivity extends AppCompatActivity {
                         : findByCoordinates(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
             } catch (IOException | CsvException e) {
                 Log.e("TAG", "Erro no metodo calculateSolarExposureHours" + e);
-                Toast.makeText(this, "Error on calculateSolarExposureHours", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Error on calculateSolarExposureHours", Toast.LENGTH_SHORT).show();
             }
 
             // Cálculo da energia gerada pelo painel solar em kWh
@@ -156,11 +159,6 @@ public class CalculateActivity extends AppCompatActivity {
                     sunInfo.getExposureHours());
 
             energiaGerada = adjustEnergyGeneratedByPeriod(energiaGerada, periodo);
-
-            //             energy.setText(String.format("%s kWh", String.format(Double.toString(energiaGerada))));
-            //            money.setText(String.format("R$%s", String.format(Double
-            //                    .toString((double) Math.round((energiaGerada * preferences.getFloat("preco", 0.5F)) * 100)
-            //                            / 100))));
 
             // Setando valores finais nos campos de texto
             fillReport(energiaGerada, preferences.getFloat("preco", 0.5F), areaPainel, eficienciaPainel, irradiacaoSolar,
@@ -177,7 +175,7 @@ public class CalculateActivity extends AppCompatActivity {
         economyPeriodText.setText(calculateActivityTextUtils.getEconomy());
         economyROIText.setText(calculateActivityTextUtils.getROI());
         environmentCO2Text.setText(calculateActivityTextUtils.getCO2Reduction());
-        //weatherForecastText.setText(calculateActivityTextUtils.getWeatherEnergyProduction());
+        weatherForecastText.setText(calculateActivityTextUtils.getWeatherForecast());
         weatherImpactText.setText(calculateActivityTextUtils.getWeatherImpactEnergyProduction());
     }
 
