@@ -3,9 +3,11 @@ package com.example.solarcalculator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.solarcalculator.dto.CordenadasDTO;
 import com.example.solarcalculator.dto.GiDTO;
 import com.example.solarcalculator.dto.SunriseSunsetDTO;
+import com.example.solarcalculator.utils.CalculateActivityTextUtils;
 import com.google.gson.Gson;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -42,10 +45,17 @@ import okhttp3.Response;
 public class CalculateActivity extends AppCompatActivity {
     OkHttpClient client;
     SharedPreferences preferences;
-    TextView energy;
-    TextView money;
-    Button btnNewAddress;
+    TextView economyPeriodText;
+    TextView economyROIText;
+    TextView environmentCO2Text;
+    TextView weatherForecastText;
+    TextView weatherImpactText;
+    Button btnVideoTutorial;
+    Button btnHome;
     SunriseSunsetDTO sunInfo;
+
+    private static final String videoId = "c8e2RSPIzQg";
+    private static final String videoTime = "5s";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,18 +81,31 @@ public class CalculateActivity extends AppCompatActivity {
         // informações salvas
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
 
-        btnNewAddress = findViewById(R.id.btnBack);
-        energy = findViewById(R.id.textEnergy);
-        money = findViewById(R.id.textMoney);
+        // Cliente HTTP
         client = new OkHttpClient();
+
+        // Buttons
+        btnHome = findViewById(R.id.btnHome);
+        btnVideoTutorial = findViewById(R.id.btnVideoTutorial);
+
+        //  Textviews
+        economyPeriodText = findViewById(R.id.economyPeriod);
+        economyROIText = findViewById(R.id.economyROI);
+        environmentCO2Text = findViewById(R.id.environmentCO2);
+        weatherForecastText = findViewById(R.id.weatherForecast);
+        weatherImpactText = findViewById(R.id.weatherImpact);
+
     }
 
     private void setButtonAndSelectFunctions(){
         // Quando botao new adress pressionado
-        btnNewAddress.setOnClickListener(v -> {
+        btnHome.setOnClickListener(v -> {
             Intent intent = new Intent(CalculateActivity.this, MainActivity.class);
             startActivity(intent);
         });
+
+        // Quando botao video tutorial pressionado
+        btnVideoTutorial.setOnClickListener(this::openYouTubeVideo);
     }
 
     // Função de transição para o doCalc principal, verifica coordenadas informadas anteriormente(SearchActivity)
@@ -128,7 +151,7 @@ public class CalculateActivity extends AppCompatActivity {
                         : findByCoordinates(latitude, longitude).getValueOfMonth(calendar.get(Calendar.MONTH));
             } catch (IOException | CsvException e) {
                 Log.e("TAG", "Erro no metodo calculateSolarExposureHours" + e);
-                Toast.makeText(this, "Error on calculateSolarExposureHours", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Error on calculateSolarExposureHours", Toast.LENGTH_SHORT).show();
             }
 
             // Cálculo da energia gerada pelo painel solar em kWh
@@ -138,11 +161,22 @@ public class CalculateActivity extends AppCompatActivity {
             energiaGerada = adjustEnergyGeneratedByPeriod(energiaGerada, periodo);
 
             // Setando valores finais nos campos de texto
-            energy.setText(String.format("%s kWh", String.format(Double.toString(energiaGerada))));
-            money.setText(String.format("R$%s", String.format(Double
-                    .toString((double) Math.round((energiaGerada * preferences.getFloat("preco", 0.5F)) * 100)
-                            / 100))));
+            fillReport(energiaGerada, preferences.getFloat("preco", 0.5F), areaPainel, eficienciaPainel, irradiacaoSolar,
+                    preferences.getInt("qtde_celula", 1), periodo);
         });
+    }
+
+    private void fillReport(double energiaGerada, float precoEnergia, double areaPainel, double eficienciaPainel, double irradiacao,
+                            Integer numberOfPanels, int periodo) {
+        CalculateActivityTextUtils calculateActivityTextUtils = new CalculateActivityTextUtils(energiaGerada, precoEnergia, areaPainel,
+                eficienciaPainel, irradiacao, numberOfPanels, periodo);
+
+        // Setando valores nos campos de texto
+        economyPeriodText.setText(calculateActivityTextUtils.getEconomy());
+        economyROIText.setText(calculateActivityTextUtils.getROI());
+        environmentCO2Text.setText(calculateActivityTextUtils.getCO2Reduction());
+        weatherForecastText.setText(calculateActivityTextUtils.getWeatherForecast());
+        weatherImpactText.setText(calculateActivityTextUtils.getWeatherImpactEnergyProduction());
     }
 
     private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel,
@@ -307,5 +341,20 @@ public class CalculateActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+    // Abrir video explicativo
+    public void openYouTubeVideo(View view) {
+
+        // Tenta abrir o vídeo no aplicativo do YouTube
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId + "?t=" + videoTime));
+
+        // Verifica se há um aplicativo que pode lidar com a Intent
+        if (appIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(appIntent);
+        } else {
+            // Se não houver, abre no navegador web
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId + "&t=" + videoTime));
+            startActivity(webIntent);
+        }
     }
 }
