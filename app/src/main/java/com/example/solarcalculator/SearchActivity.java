@@ -120,7 +120,7 @@ public class SearchActivity extends AppCompatActivity {
                     textError = findViewById(R.id.textViewError);
                     textError.setText("Erro ao tentar buscar informações do endereço, por favor tente mais tarde!");
                     Log.e("TAG", "Erro no metodo doGet" + e);
-                    Toast.makeText(SearchActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SearchActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
 
@@ -158,7 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                             textAddress.setText(dto.getDisplayName());
                             textLat.setText(dto.getLat());
                             textLon.setText(dto.getLon());
-                            textError.setTextColor(getResources().getColor(R.color.laranja));
+                            textError.setTextColor(getResources().getColor(R.color.red));
                             textError.setText("Caso necessário altere os valor de configurações no menu superior da tela inicial");
                         }
                         else{
