@@ -6,11 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,12 +26,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.solarcalculator.utils.GeocoderUtils;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -153,22 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Geocoder para pegar endereço com base nas coordenadas
     private void getAddressFromLocation(Location location) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                Address address = addresses.get(0);
-                String streetAddress = address.getAddressLine(0);
-                String coordinatesAddress = address.getLatitude() + " " + address.getLongitude();
-                editAddress.setText(coordinatesAddress);
-                Toast.makeText(MainActivity.this, streetAddress, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(MainActivity.this, "Address not found", Toast.LENGTH_SHORT).show();
-            }
-        } catch (IOException e) {
-            Log.e("TAG", "Erro no metodo getAddressFromLocation" + e);
-            Toast.makeText(this, "Unable to get street address", Toast.LENGTH_SHORT).show();
-        }
+        editAddress.setText(GeocoderUtils.getAddressFromLocation(location, this));
     }
 
     // Pega valores salvos anteriormente ou atribui padrões caso primeira entrada
