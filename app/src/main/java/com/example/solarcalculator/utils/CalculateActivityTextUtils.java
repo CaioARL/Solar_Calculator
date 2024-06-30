@@ -1,18 +1,20 @@
 package com.example.solarcalculator.utils;
 
+import com.example.solarcalculator.dto.WeatherDTO;
+import com.example.solarcalculator.dto.WeatherPerDayDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class CalculateActivityTextUtils {
 
-    private static final Double sixtyPercent = 0.6;
     private static final Double twentyPercent = 0.2;
     private static final Double dollar = 5.5;
-    private static final Double icms = (double) (20/100);
+    private static final Double wattAverage = 5.3;
 
     Double energy;
     Double irradiation;
-    Double energyOnCloudyDays;
-    Double energyOnRainyDays;
     Double energyPrice;
     Integer period;
     Double co2ReductionCoal;
@@ -25,15 +27,15 @@ public class CalculateActivityTextUtils {
     Double panelArea;
     Double panelEfficiency;
     Integer numberOfPanels;
+    WeatherDTO weatherDTO;
 
-    public CalculateActivityTextUtils(Double energy, float energyPrice, Double panelArea, Double panelEfficiency, Double irradiation, Integer numberOfPanels, Integer period) {
+    public CalculateActivityTextUtils(Double energy, float energyPrice, Double panelArea, Double panelEfficiency,
+                                      Double irradiation, Integer numberOfPanels, Integer period, WeatherDTO weatherDTO) {
         this.energy = energy * numberOfPanels;
         this.panelArea = panelArea;
         this.irradiation = irradiation;
         this.numberOfPanels = numberOfPanels;
         this.panelEfficiency = panelEfficiency;
-        this.energyOnCloudyDays = energy * sixtyPercent;
-        this.energyOnRainyDays = energy * twentyPercent;
         this.energyPrice = (double) energyPrice;
         this.period = period;
         this.co2ReductionCoal = energy * 0.94;
@@ -43,6 +45,7 @@ public class CalculateActivityTextUtils {
         this.initialInvestment = getInitialInvestment();
         this.economyYearly = getAnnualPrice();
         this.payback = initialInvestment/getAnnualPrice();
+        this.weatherDTO = weatherDTO;
     }
 
     public String getEconomy() {
@@ -68,30 +71,34 @@ public class CalculateActivityTextUtils {
     }
 
     public String getWeatherImpactEnergyProduction() {
-        return String.format(Locale.US,"Produção de energia em diferentes condições climáticas: " +
-                "\nEnsolarado: %.2f kWh" +
-                "\nParcialmente nublado: %.2f kWh" +
-                "\nChuvoso: %.2f kWh",
-                energy, energyOnCloudyDays, energyOnRainyDays);
+        return String.format(Locale.US,"Produção de energia na data atual: " +
+                "\nCondições atuais: %.2f kWh",
+                energy);
     }
 
     public String getWeatherForecast() {
-        return "Previsão do tempo: ";
+        return "Previsão do tempo: \n" + getWeather().toString()
+                .replace("[", "")
+                .replace("]", "")
+                .replace(",", "");
     }
 
     public double getInitialInvestment() {
-        return ((panelArea * (panelEfficiency/100) * irradiation * energyPrice * dollar) * 1 + icms) * numberOfPanels;
+        return (panelArea * 2000) * dollar * twentyPercent * numberOfPanels;
     }
 
     public Double getAnnualPrice() {
+        double finalEnergy;
+        if(energy<3)
+            finalEnergy = wattAverage;
+        else
+            finalEnergy = energy;
+
         if (period == 0) {
-            return (energy * 365) * energyPrice;
+            return (finalEnergy * 365) * energyPrice;
         }
         if (period == 1) {
-            return (energy * 12) * energyPrice;
-        }
-        if (period == 2) {
-            return energy * energyPrice;
+            return (finalEnergy * 12) * energyPrice;
         }
         return 0.0;
     }
@@ -103,9 +110,22 @@ public class CalculateActivityTextUtils {
         if (period == 1) {
             return "Mensal";
         }
-        if (period == 2) {
-            return "Anual";
-        }
         return "";
+    }
+
+    private List<WeatherPerDayDTO> getWeather(){
+        List<WeatherPerDayDTO> weatherPerDaysDTO = new ArrayList<>();
+
+        for(int i = 0; i < weatherDTO.getHourly().getTime().size(); i++){
+            WeatherPerDayDTO weatherPerDay = new WeatherPerDayDTO();
+            weatherPerDay.setDate(weatherDTO.getHourly().getTime().get(i));
+            weatherPerDay.setTemperature(weatherDTO.getHourly().getTemperature_2m().get(i) + weatherDTO.getHourly_units().getTemperature_2m());
+            weatherPerDay.setPrecipitation(weatherDTO.getHourly().getPrecipitation().get(i) + weatherDTO.getHourly_units().getPrecipitation());
+            weatherPerDay.setCloudCover(weatherDTO.getHourly().getCloud_cover().get(i) + weatherDTO.getHourly_units().getCloud_cover());
+            weatherPerDay.setWindSpeed(weatherDTO.getHourly().getWind_speed_10m().get(i) + weatherDTO.getHourly_units().getWind_speed_10m());
+            weatherPerDaysDTO.add(weatherPerDay);
+        }
+
+        return weatherPerDaysDTO;
     }
 }

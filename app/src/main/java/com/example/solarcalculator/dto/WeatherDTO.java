@@ -5,7 +5,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class IrradiationDTO {
+public class WeatherDTO {
+
     private double latitude;
     private double longitude;
     private double generationtime_ms;
@@ -13,8 +14,6 @@ public class IrradiationDTO {
     private String timezone;
     private String timezone_abbreviation;
     private double elevation;
-    private HourlyIrradiationUnitsDTO hourly_units;
-    private HourlyIrradiationDTO hourly;
+    private HourlyWeatherUnitsDTO hourly_units;
+    private HourlyWeatherDTO hourly;
 }
-
-

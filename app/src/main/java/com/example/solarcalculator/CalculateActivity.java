@@ -20,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.solarcalculator.dto.IrradiationDTO;
+import com.example.solarcalculator.dto.WeatherDTO;
 import com.example.solarcalculator.utils.CalculateActivityTextUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -31,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -75,6 +76,22 @@ public class CalculateActivity extends AppCompatActivity {
 
         // Realiza cáculos
         this.doCalc();
+    }
+
+    // Abrir video explicativo
+    public void openYouTubeVideo(View view) {
+
+        // Tenta abrir o vídeo no aplicativo do YouTube
+        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId + "?t=" + videoTime));
+
+        // Verifica se há um aplicativo que pode lidar com a Intent
+        if (appIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(appIntent);
+        } else {
+            // Se não houver, abre no navegador web
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId + "&t=" + videoTime));
+            startActivity(webIntent);
+        }
     }
 
     // ## PRIVATES ##
@@ -142,60 +159,42 @@ public class CalculateActivity extends AppCompatActivity {
 
     private void doCalc(String latitude, String longitude) throws IOException, CsvException {
         // Chama api externa para pegar iradiação solar e posteriormente as horas de exposição solar
-        doGet(latitude, longitude);
+        doGetIrradiation(latitude, longitude);
     }
 
-    private Map<String, Double> sumIrradiationPerHours(IrradiationDTO irradiationDTO, int incidencia) {
+    private double sumIrradiationPerHours(IrradiationDTO irradiationDTO, int incidencia) {
         double sum = 0;
-        double difSolarHours = 0;
-
         if(incidencia==0)
             for (Double data : irradiationDTO.getHourly().getShortwave_radiation()) {
                 sum += data;
-                if (data==0)
-                    difSolarHours++;
             }
-
         if(incidencia==1)
             for (Double data : irradiationDTO.getHourly().getDirect_radiation()) {
                 sum += data;
-                if (data==0)
-                    difSolarHours++;
             }
-
         if(incidencia==2)
             for (Double data : irradiationDTO.getHourly().getDiffuse_radiation()) {
                 sum += data;
-                if (data==0)
-                    difSolarHours++;
             }
-
         if(incidencia==3)
             for (Double data : irradiationDTO.getHourly().getDirect_normal_irradiance()) {
                 sum += data;
-                if (data==0)
-                    difSolarHours++;
             }
-
         if(incidencia==4)
             for (Double data : irradiationDTO.getHourly().getGlobal_tilted_irradiance()) {
                 sum += data;
-                if (data==0)
-                    difSolarHours++;
             }
-
         if(incidencia==5)
             for (Double data : irradiationDTO.getHourly().getTerrestrial_radiation()) {
                 sum += data;
             }
-
-        return Map.of("irradiacaoSolar", sum, "horasSemSol", difSolarHours);
+        return sum;
     }
 
     private void fillReport(double energiaGerada, float precoEnergia, double areaPainel, double eficienciaPainel, double irradiacao,
-                            Integer numberOfPanels, int periodo) {
+                            Integer numberOfPanels, int periodo, WeatherDTO weatherDTO) {
         CalculateActivityTextUtils calculateActivityTextUtils = new CalculateActivityTextUtils(energiaGerada, precoEnergia, areaPainel,
-                eficienciaPainel, irradiacao, numberOfPanels, periodo);
+                eficienciaPainel, irradiacao, numberOfPanels, periodo, weatherDTO);
 
         // Setando valores nos campos de texto
         economyPeriodText.setText(calculateActivityTextUtils.getEconomy());
@@ -205,13 +204,15 @@ public class CalculateActivity extends AppCompatActivity {
         weatherImpactText.setText(calculateActivityTextUtils.getWeatherImpactEnergyProduction());
     }
 
-    private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel, double time) {
-        return preferences.getInt("qtde_celula", 1)
-                * (areaPainel * irradiacaoSolar * (eficienciaPainel/100) * time)/1000;
+    private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel) {
+        return preferences.getInt("qtde_celula", 1) *
+                areaPainel *
+                (irradiacaoSolar/100) *
+                (eficienciaPainel/100);
     }
 
-    public static List<String> getDateRangeByPeriod(int periodo) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static List<String> getDateRangeByPeriod(int periodo) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
         Calendar calendar = Calendar.getInstance();
 
         List<String> dateRange = new ArrayList<>();
@@ -230,22 +231,6 @@ public class CalculateActivity extends AppCompatActivity {
         return dateRange;
     }
 
-    // Abrir video explicativo
-    public void openYouTubeVideo(View view) {
-
-        // Tenta abrir o vídeo no aplicativo do YouTube
-        Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + videoId + "?t=" + videoTime));
-
-        // Verifica se há um aplicativo que pode lidar com a Intent
-        if (appIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(appIntent);
-        } else {
-            // Se não houver, abre no navegador web
-            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=" + videoId + "&t=" + videoTime));
-            startActivity(webIntent);
-        }
-    }
-
     private String getUrlBaseOpenMeteo(String latitude, String longitude){
         return "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude;
     }
@@ -256,7 +241,11 @@ public class CalculateActivity extends AppCompatActivity {
                 "&start_date=" + dateRange.get(0) + "&end_date=" + dateRange.get(1);
     }
 
-    public void doGet(String latitude, String longitude){
+    private String getWheaterUrl(String latitude, String longitude){
+        return getUrlBaseOpenMeteo(latitude, longitude) + "&hourly=temperature_2m,precipitation,cloud_cover,wind_speed_10m&forecast_days=1";
+    }
+
+    private void doGetIrradiation(String latitude, String longitude){
         // Pega url dinâmica
         Request request = new Request.Builder().url(getIrradiationUrl(latitude, longitude, periodo)).build();
         client.newCall(request).enqueue(new Callback() {
@@ -265,7 +254,7 @@ public class CalculateActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(() -> {
-                    Log.e("TAG", "Erro no metodo doGet" + e);
+                    Log.e("TAG", "Erro no metodo doGetIrradiation" + e);
                     Toast.makeText(CalculateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
@@ -284,15 +273,56 @@ public class CalculateActivity extends AppCompatActivity {
 
                         irradiationDTO = gson.fromJson(jsonResponse, type);
 
-                        Map<String, Double> irradiacaoSolar = sumIrradiationPerHours(irradiationDTO, incidencia);
+                        double irradiacaoSolar = sumIrradiationPerHours(irradiationDTO, incidencia);
 
                         // Cálculo da energia gerada pelo painel solar em kWh
-                        double energiaGerada = calculateEnergyGenerated(areaPainel, irradiacaoSolar.get("irradiacaoSolar"),
-                                eficienciaPainel, 24-irradiacaoSolar.get("horasSemSol"));
+                        double energiaGerada = calculateEnergyGenerated(areaPainel, irradiacaoSolar,
+                                eficienciaPainel);
+
+                        // Chama api externa para pegar informações do clima
+                        doGetWeather(latitude, longitude, energiaGerada, irradiacaoSolar);
+
+                    } catch (Exception e) {
+                        Toast.makeText(CalculateActivity.this, "Error on doGet.", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+        });
+    }
+
+    private void doGetWeather(String latitude, String longitude, double energiaGerada, double irradiacaoSolar){
+        // Pega url dinâmica
+        Request request = new Request.Builder().url(getWheaterUrl(latitude, longitude)).build();
+        client.newCall(request).enqueue(new Callback() {
+            // Caso ocorra erro preenche texto genérico
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    Log.e("TAG", "Erro no metodo doGetWeather" + e);
+                    Toast.makeText(CalculateActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+            }
+
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) {
+                runOnUiThread(() -> {
+                    try {
+                        assert response.body() != null;
+
+                        String jsonResponse = response.body().string();
+
+                        Gson gson = new Gson();
+                        Type type = new TypeToken<WeatherDTO>() {}.getType();
+
+                        WeatherDTO weatherDTO = gson.fromJson(jsonResponse, type);
 
                         // Setando valores finais nos campos de texto
-                        fillReport(energiaGerada, preferences.getFloat("preco", 0.5F), areaPainel, eficienciaPainel, irradiacaoSolar.get("irradiacaoSolar"),
-                                preferences.getInt("qtde_celula", 1), periodo);
+                        fillReport(energiaGerada, preferences.getFloat("preco", 0.5F), areaPainel,
+                                eficienciaPainel, irradiacaoSolar,
+                                preferences.getInt("qtde_celula", 1), periodo, weatherDTO);
 
                     } catch (Exception e) {
                         Toast.makeText(CalculateActivity.this, "Error on doGet.", Toast.LENGTH_SHORT).show();

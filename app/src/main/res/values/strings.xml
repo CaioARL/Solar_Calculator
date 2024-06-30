@@ -39,7 +39,7 @@
     <string name="previsao_title">Previsão de Clima e Impacto na Produção</string>
     <string name="educacional_title">Módulo Educacional</string>
     <string name="educacional">Princípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica.</string>
-    <string name="btn_videos_text">Assista a Vídeos Explicativos</string>
+    <string name="btn_videos_text">Saiba mais</string>
     <string-array name="periodos">
         <item>Diário</item>
         <item>Mensal</item>

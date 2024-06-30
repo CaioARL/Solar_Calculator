@@ -1,13 +1,11 @@
 package com.example.solarcalculator.dto;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class HourlyUnitsDTO {
+public class HourlyIrradiationUnitsDTO {
     private String time;
     private String shortwave_radiation;
     private String direct_radiation;

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HourlyDTO {
+public class HourlyIrradiationDTO {
     private List<String> time;
     private List<Double> shortwave_radiation;
     private List<Double> direct_radiation;
