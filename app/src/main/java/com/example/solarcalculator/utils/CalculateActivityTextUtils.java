@@ -10,8 +10,10 @@ import java.util.Locale;
 public class CalculateActivityTextUtils {
 
     private static final Double twentyPercent = 0.2;
+    private static final Double fiftyPercent = 0.5;
+    private static final Double seventyPercent = 0.7;
+    private static final Double ninetyPercent = 0.9;
     private static final Double dollar = 5.5;
-    private static final Double wattAverage = 5.3;
 
     Double energy;
     Double irradiation;
@@ -23,7 +25,7 @@ public class CalculateActivityTextUtils {
     Double co2ReductionElectricityMix;
     Double initialInvestment;
     Double economyYearly;
-    Double payback;
+    long payback;
     Double panelArea;
     Double panelEfficiency;
     Integer numberOfPanels;
@@ -31,20 +33,20 @@ public class CalculateActivityTextUtils {
 
     public CalculateActivityTextUtils(Double energy, float energyPrice, Double panelArea, Double panelEfficiency,
                                       Double irradiation, Integer numberOfPanels, Integer period, WeatherDTO weatherDTO) {
-        this.energy = energy * numberOfPanels;
+        this.energy = energy;
         this.panelArea = panelArea;
         this.irradiation = irradiation;
         this.numberOfPanels = numberOfPanels;
-        this.panelEfficiency = panelEfficiency;
+        this.panelEfficiency = panelEfficiency/100;
         this.energyPrice = (double) energyPrice;
         this.period = period;
-        this.co2ReductionCoal = energy * 0.94;
-        this.co2ReductionNaturalGas = energy * 0.56;
-        this.co2ReductionOil = energy * 0.71;
-        this.co2ReductionElectricityMix = energy * 0.5;
+        this.co2ReductionCoal = energy * ninetyPercent;
+        this.co2ReductionNaturalGas = energy * fiftyPercent;
+        this.co2ReductionOil = energy * seventyPercent;
+        this.co2ReductionElectricityMix = energy * fiftyPercent;
         this.initialInvestment = getInitialInvestment();
         this.economyYearly = getAnnualPrice();
-        this.payback = initialInvestment/getAnnualPrice();
+        this.payback = Math.round(initialInvestment/getAnnualPrice());
         this.weatherDTO = weatherDTO;
     }
 
@@ -57,7 +59,7 @@ public class CalculateActivityTextUtils {
         return String.format(Locale.US,"Retorno sobre o investimento: " +
                 "\nInvestimento inicial: R$%.2f" +
                 "\nEconomia anual: R$%.2f" +
-                "\nPayback: %.2f anos",
+                    "\nPayback: %s anos",
                 initialInvestment, economyYearly, payback);
     }
 
@@ -71,9 +73,8 @@ public class CalculateActivityTextUtils {
     }
 
     public String getWeatherImpactEnergyProduction() {
-        return String.format(Locale.US,"Produção de energia na data atual: " +
-                "\nCondições atuais: %.2f kWh",
-                energy);
+        return String.format(Locale.US,"Produção média de energia diária: %.2f kW/h",
+                period==0 ? energy : energy/30);
     }
 
     public String getWeatherForecast() {
@@ -84,31 +85,25 @@ public class CalculateActivityTextUtils {
     }
 
     public double getInitialInvestment() {
-        return (panelArea * 2000) * dollar * twentyPercent * numberOfPanels;
+        return (panelArea * 2000) * dollar * panelEfficiency * numberOfPanels * (1+twentyPercent);
     }
 
     public Double getAnnualPrice() {
-        double finalEnergy;
-        if(energy<3)
-            finalEnergy = wattAverage;
-        else
-            finalEnergy = energy;
-
         if (period == 0) {
-            return (finalEnergy * 365) * energyPrice;
+            return (energy * 365) * energyPrice;
         }
         if (period == 1) {
-            return (finalEnergy * 12) * energyPrice;
+            return (energy * 12) * energyPrice;
         }
         return 0.0;
     }
 
     public String getNamePeriod(){
         if (period == 0) {
-            return "Diário";
+            return "diária";
         }
         if (period == 1) {
-            return "Mensal";
+            return "mensal";
         }
         return "";
     }

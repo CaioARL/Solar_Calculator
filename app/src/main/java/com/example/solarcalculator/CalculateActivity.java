@@ -26,6 +26,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.opencsv.exceptions.CsvException;
 
+import org.apache.commons.logging.LogFactory;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -41,6 +43,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class CalculateActivity extends AppCompatActivity {
+    private static final org.apache.commons.logging.Log log = LogFactory.getLog(CalculateActivity.class);
     OkHttpClient client;
     SharedPreferences preferences;
     TextView economyPeriodText;
@@ -205,10 +208,7 @@ public class CalculateActivity extends AppCompatActivity {
     }
 
     private double calculateEnergyGenerated(double areaPainel, double irradiacaoSolar, double eficienciaPainel) {
-        return preferences.getInt("qtde_celula", 1) *
-                areaPainel *
-                (irradiacaoSolar/100) *
-                (eficienciaPainel/100);
+        return ((areaPainel * (eficienciaPainel/100)) * preferences.getInt("qtde_celula", 1)) * irradiacaoSolar/100;
     }
 
     private static List<String> getDateRangeByPeriod(int periodo) {
@@ -283,7 +283,8 @@ public class CalculateActivity extends AppCompatActivity {
                         doGetWeather(latitude, longitude, energiaGerada, irradiacaoSolar);
 
                     } catch (Exception e) {
-                        Toast.makeText(CalculateActivity.this, "Error on doGet.", Toast.LENGTH_SHORT).show();
+                        log.error("Erro no método doGetIrradiation", e);
+                        Toast.makeText(CalculateActivity.this, "Error on doGetIrradiation.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -325,7 +326,8 @@ public class CalculateActivity extends AppCompatActivity {
                                 preferences.getInt("qtde_celula", 1), periodo, weatherDTO);
 
                     } catch (Exception e) {
-                        Toast.makeText(CalculateActivity.this, "Error on doGet.", Toast.LENGTH_SHORT).show();
+                        log.error("Erro no método doGetWeather", e);
+                        Toast.makeText(CalculateActivity.this, "Error on doGetWeather.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
