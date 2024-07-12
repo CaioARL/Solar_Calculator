@@ -143,14 +143,6 @@ public class SearchActivity extends AppCompatActivity {
                         if (!placeList.isEmpty()) {
                             PlaceDTO dto = placeList.get(0);
 
-                            // Informações vazias caso não retorne nada
-                            if(!dto.getDisplayName().toLowerCase().contains("brasil") && !dto.getDisplayName().toLowerCase().contains("brazil")){
-                                textAddress.setText("Endereço não encontrado no Brasil");
-                                textLat.setText("0.0000000");
-                                textLon.setText("0.0000000");
-                                return;
-                            }
-
                             // Carrega mapa do endereço
                             loadOpenStreetMap(convertToBoundingBoxDTO(dto.getBoundingbox()));
 
