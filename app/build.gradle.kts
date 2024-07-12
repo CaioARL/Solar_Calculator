@@ -11,7 +11,7 @@ android {
         minSdk = 21
         targetSdk = 34
         versionCode = 1
-        versionName = "feature-melhorias-servicos-externos-SNAPSHOT"
+        versionName = "develop-SNAPSHOT"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
