@@ -39,17 +39,17 @@
     <string name="previsao_title">Previsão de Clima e Impacto na Produção</string>
     <string name="educacional_title">Módulo Educacional</string>
     <string name="educacional">Princípios de Funcionamento: \nOs painéis solares captam a luz do sol e geram eletricidade em corrente contínua (CC). O inversor converte essa eletricidade em corrente alternada (CA) utilizável pelos aparelhos elétricos. A energia excedente pode ser armazenada em baterias ou injetada na rede elétrica.</string>
-    <string name="btn_videos_text">Assista a Vídeos Explicativos</string>
+    <string name="btn_videos_text">Saiba mais</string>
     <string-array name="periodos">
         <item>Diário</item>
         <item>Mensal</item>
-        <item>Anual</item>
     </string-array>
     <string-array name="incidencia">
-        <item>Irradiação Global Horizontal</item>
-        <item>Irradiação Direta Normal</item>
-        <item>Irradiação no Plano Inclinado</item>
-        <item>Irradiação Difusa</item>
-        <item>Irradiação Fotossinteticamente Ativa</item>
+        <item>Radiação Solar de Ondas Curtas GHI</item>
+        <item>Radiação Solar Direta</item>
+        <item>Radiação Solar Difusa DHI</item>
+        <item>Irradiância Normal Direta DNI</item>
+        <item>Radiação Inclinada Global GTI</item>
+        <item>Radiação Solar Terrestre</item>
     </string-array>
 </resources>
