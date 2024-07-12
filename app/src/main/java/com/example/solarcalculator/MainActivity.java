@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences("saved_info", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        if (!preferences.contains("taxa")) editor.putFloat("taxa", 20F);
+        if (!preferences.contains("taxa")) editor.putFloat("taxa", 12F);
         if (!preferences.contains("preco")) editor.putFloat("preco", 0.5F);
         if (!preferences.contains("periodo")) editor.putInt("periodo", 0);
         if (!preferences.contains("qtde_celula")) editor.putInt("qtde_celula", 1);
