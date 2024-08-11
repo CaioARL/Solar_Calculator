@@ -13,7 +13,8 @@ public class CalculateActivityTextUtils {
     private static final Double fiftyPercent = 0.5;
     private static final Double seventyPercent = 0.7;
     private static final Double ninetyPercent = 0.9;
-    private static final Double dollar = 5.5;
+    private static final Double WPPrice = 3.0;
+    private static final Double extraCoast = 9000.0;
 
     Double energy;
     Double irradiation;
@@ -30,9 +31,11 @@ public class CalculateActivityTextUtils {
     Double panelEfficiency;
     Integer numberOfPanels;
     WeatherDTO weatherDTO;
+    Double panelPotency;
 
     public CalculateActivityTextUtils(Double energy, float energyPrice, Double panelArea, Double panelEfficiency,
                                       Double irradiation, Integer numberOfPanels, Integer period, WeatherDTO weatherDTO) {
+
         this.energy = energy;
         this.panelArea = panelArea;
         this.irradiation = irradiation;
@@ -44,6 +47,7 @@ public class CalculateActivityTextUtils {
         this.co2ReductionNaturalGas = energy * fiftyPercent;
         this.co2ReductionOil = energy * seventyPercent;
         this.co2ReductionElectricityMix = energy * fiftyPercent;
+        this.panelPotency = getPanelPotency();
         this.initialInvestment = getInitialInvestment();
         this.economyYearly = getAnnualPrice();
         this.payback = Math.round(initialInvestment/getAnnualPrice());
@@ -85,7 +89,11 @@ public class CalculateActivityTextUtils {
     }
 
     public double getInitialInvestment() {
-        return (panelArea * 2000) * dollar * panelEfficiency * numberOfPanels * (1+twentyPercent);
+        return (((panelPotency * WPPrice * (1+twentyPercent)) * numberOfPanels) + extraCoast);
+    }
+
+    public double getPanelPotency() {
+        return this.panelArea * (this.period==1?this.irradiation/30:this.irradiation) * this.panelEfficiency;
     }
 
     public Double getAnnualPrice() {
